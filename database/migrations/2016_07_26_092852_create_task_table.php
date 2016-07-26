@@ -17,13 +17,13 @@ class CreateTaskTable extends Migration
         Schema::create(self::TABLE, function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('user_id',11);
+            $table->integer('user_id');
             $table->string('name',255);
-            $table->tinyInteger('state',2)->default(2);
-            $table->tinyInteger('enter_type',4)->default(1);
+            $table->tinyInteger('state')->default(2);
+            $table->tinyInteger('enter_type')->default(1);
             $table->string('url',255);
             $table->string('keyword',255);
-            $table->integer('per_pv',100,true);
+            $table->integer('per_pv');
             $table->longText('per_pv_spread');
             $table->timestamp('start_time');
             $table->timestamp('end_time');

@@ -18,9 +18,9 @@ class CreateHostProxyTable extends Migration
         Schema::create(self::TABLE, function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('host_id',10,true);
+            $table->integer('host_id');
             $table->string('addr',30);
-            $table->integer('area_id',10,true);
+            $table->integer('area_id');
             $table->timestamps();
         });
     }

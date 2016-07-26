@@ -17,12 +17,12 @@ class CreateTaskLogTable extends Migration
         Schema::create(self::TABLE, function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('task_id',10,true);
+            $table->integer('task_id');
             $table->timestamp('expect_time');
             $table->timestamp('start_time');
             $table->timestamp('end_time');
             $table->string('addr',30);
-            $table->integer('host_id',10,true);
+            $table->integer('host_id');
             $table->timestamps();
         });
     }
