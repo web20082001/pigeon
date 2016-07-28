@@ -11,8 +11,9 @@
         @include('common.footer_resource')
     </head>
 
-    <body class="hold-transition skin-blue sidebar-mini">
-        <div class="wrapper">
+    <body>
+        <div>
+            @include('common.notify')
             {{-- 自定义加载通用的--}}
             @include('common.main_header')
 

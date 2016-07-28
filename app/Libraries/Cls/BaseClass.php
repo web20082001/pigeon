@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Facades\Excel as ExcelTools;
 
 abstract class BaseClass
 {
+    protected $model;
     /**
      *
      * @param $query
@@ -57,7 +58,6 @@ abstract class BaseClass
         return $disabled_values[$value];
     }
 
-
     /**
      * 判断
      * @param $val
@@ -69,4 +69,37 @@ abstract class BaseClass
     public function equal($val,$equal,$true = 1,$false=0){
         return ($val == $equal) ? $true:$false;
     }
+
+    function getById($id,$with=null){
+
+        $query = $this->model->where('id',$id);
+
+        if(!is_null($with)){
+            $query->with($with);
+        }
+
+        return $query->firstOrFail();
+    }
+
+    function update($upItems){
+
+        if(array_key_exists('id',$upItems)){
+
+            $id = $upItems['id'];
+            unset($upItems['id']);
+
+            $model = $this->getById($id);
+
+            $model = model_update($model, $upItems);
+            return $model->save();
+
+        }else{
+            return false;
+        }
+    }
+
+    function delete($id){
+        return $this->getById($id)->delete();
+    }
+
 }

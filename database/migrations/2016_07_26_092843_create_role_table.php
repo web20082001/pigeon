@@ -20,7 +20,7 @@ class CreateRoleTable extends Migration
             $table->increments('id');
             $table->string('name',100);
             $table->text('memo');
-            $table->timestamp('disabled_at');
+            $table->timestamp('disabled_at')->nullable();
             $table->timestamps();
         });
     }

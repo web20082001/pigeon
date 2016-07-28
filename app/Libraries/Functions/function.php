@@ -286,7 +286,7 @@ function models_attributes($models, $attribute, $emptyReturn=[]){
 function model_update($model, $upItems){
 
     foreach($upItems as $k =>$v){
-        $model->$v = $v;
+        $model->$k = $v;
     }
     return $model;
 }

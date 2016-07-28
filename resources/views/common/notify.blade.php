@@ -1,35 +1,30 @@
 @if (count($errors) > 0)
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+    <div class="ui error message">
+        <div class="header"></div>
+        @foreach ($errors->all() as $error)
+        <p>{{ $error }}</p>
+        @endforeach
     </div>
 @endif
 
 @if (session('success'))
-    <div class="alert alert-success">
+    <div class="ui success message">
         {{ session('success') }}
         @if (count(session('data')))
-        <ol>
             @foreach (session('data')['success_msgs'] as $m)
-                <li>{{ $m }}</li>
+                <p>{{ $m }}</p>
             @endforeach
-        </ol>
         @endif
     </div>
 @endif
 
 @if (session('error'))
-    <div class="alert alert-danger">
+    <div class="ui error message">
         {{ session('error') }}
         @if (count(session('data')))
-            <ol>
                 @foreach (session('data')['error_msgs'] as $m)
-                    <li>{{ $m }}</li>
+                    <p>{{ $m }}</p>
                 @endforeach
-            </ol>
         @endif
     </div>
 @endif

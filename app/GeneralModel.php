@@ -8,6 +8,7 @@
 
 namespace App;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class GeneralModel extends Model
 {
@@ -17,5 +18,27 @@ class GeneralModel extends Model
     public function getTable()
     {
         return $this->table;
+    }
+
+    public function disabledAtConvert($value){
+
+        $disabled_values = [
+            '0' => null,
+            '1' => Carbon::now()->toDateTimeString()
+        ];
+
+        return $disabled_values[$value];
+    }
+
+
+    public function disabledAtText($value){
+
+        if(is_null($value)){
+            $val = '启用';
+        }else{
+            $val = '禁用';
+        }
+
+        return $val;
     }
 }

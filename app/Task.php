@@ -9,8 +9,8 @@ use Lang;
 class Task extends GeneralModel
 {
     const TABLE = 'task';
-    protected $table = self::TABLE;
-    protected $timestamps = true;
+    public $table = self::TABLE;
+    public $timestamps = true;
 
     # 任务状态
     const CANCEL = 1;

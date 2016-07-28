@@ -22,7 +22,7 @@ class CreateAreaTable extends Migration
             $table->string('name',100)->unique();
             $table->string('code',100)->unique();
             $table->integer('order_sort')->default(0);
-            $table->timestamp('disabled_at');
+            $table->timestamp('disabled_at')->nullable();
             $table->timestamps();
         });
     }

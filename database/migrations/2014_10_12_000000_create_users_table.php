@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('realname',100)->unique();
             $table->string('email',255)->unique();
             $table->string('password',100);
-            $table->timestamp('disabled_at');            
+            $table->timestamp('disabled_at')->nullable();
             $table->integer('role_id');
             # $table->foreign('role_id')->references('id')->on('role');
             $table->rememberToken();

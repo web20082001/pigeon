@@ -1,7 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2016/7/27
- * Time: 11:08
- */
+
+return [
+    'area' => [
+        'name' => '名称',
+        'code' => '编号'
+    ],
+
+    'role' => [
+        'name' => '名称',
+        'memo' => '描述'
+    ]
+];

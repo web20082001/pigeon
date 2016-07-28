@@ -22,7 +22,7 @@ class CreateHostTable extends Migration
             $table->string('memory',10);
             $table->integer('area_id');
             $table->string('remote_addr',30);
-            $table->tinyInteger('state')->default(1);
+            $table->timestamp('disabled_at')->nullable();
             $table->string('adsl_username',100);
             $table->string('adsl_password',100);
             $table->string('contact',50);
