@@ -2,13 +2,16 @@
     <thead>
     <tr>
         <th>
-            <a href="{!! $clsUserIndex->getBaseLink('name') !!}">名称</a>
+            <a href="{!! $clsUserIndex->getBaseLink('name') !!}">用户名</a>
         </th>
         <th>
-            <a href="{!! $clsUserIndex->getBaseLink('code') !!}">编号</a>
+            <a href="{!! $clsUserIndex->getBaseLink('realname') !!}">真实姓名</a>
         </th>
         <th>
-            <a href="{!! $clsUserIndex->getBaseLink('order_sort') !!}">排序</a>
+            <a href="{!! $clsUserIndex->getBaseLink('email') !!}">邮箱</a>
+        </th>
+        <th>
+            <a href="{!! $clsUserIndex->getBaseLink('role_id') !!}">权限</a>
         </th>
         <th>
             <a href="{!! $clsUserIndex->getBaseLink('disabled_at') !!}">状态</a>
@@ -25,16 +28,16 @@
     </tr>
     </thead>
     <tbody>
-    @foreach ($Users as $a)
+    @foreach ($users as $a)
     <tr>
         <td>{{$a->name}}</td>
-        <td>{{$a->code}}</td>
-        <td>{{$a->order_sort}}</td>
+        <td>{{$a->realname}}</td>
+        <td>{{$a->email}}</td>
+        <td>{{$a->role_name}}</td>
         <td>{{$a->disabled_at_text()}}</td>
         <td>{{$a->created_at}}</td>
         <td>{{$a->updated_at}}</td>
         <td>
-
 
             {!! Form::open(array('action' => array('UserController@destroy', $a->id), 'method'=>'post')) !!}
                 <input name="_method" type="hidden" value="delete">
@@ -43,11 +46,7 @@
             </form>
             {!! Form::close() !!}
 
-
-            {!! Form::open(array('action' => array('UserController@edit', $a->id), 'method'=>'get')) !!}
-            <button type="submit" class="ui primary button">编辑</button>
-            </form>
-            {!! Form::close() !!}
+            <a href="/user/{{$a->id}}/edit">编辑</a>
 
         </td>
     </tr>
@@ -55,8 +54,8 @@
     </tbody>
     <tfoot>
     <tr>
-        <th colspan="7">
-            {!! $Users->render() !!}
+        <th colspan="8">
+            {!! $users->render() !!}
         </th>
     </tr>
     </tfoot>

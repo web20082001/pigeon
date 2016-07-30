@@ -2,13 +2,10 @@
     <thead>
     <tr>
         <th>
-            <a href="{!! $clsHostIndex->getBaseLink('name') !!}">名称</a>
+            <a href="{!! $clsHostIndex->getBaseLink('area_id') !!}">地区</a>
         </th>
         <th>
-            <a href="{!! $clsHostIndex->getBaseLink('code') !!}">编号</a>
-        </th>
-        <th>
-            <a href="{!! $clsHostIndex->getBaseLink('order_sort') !!}">排序</a>
+            <a href="{!! $clsHostIndex->getBaseLink('remote_addr') !!}">主机地址</a>
         </th>
         <th>
             <a href="{!! $clsHostIndex->getBaseLink('disabled_at') !!}">状态</a>
@@ -27,9 +24,8 @@
     <tbody>
     @foreach ($hosts as $a)
     <tr>
-        <td>{{$a->name}}</td>
-        <td>{{$a->code}}</td>
-        <td>{{$a->order_sort}}</td>
+        <td>{{$a->area_name}}</td>
+        <td>{{$a->remote_addr}}</td>
         <td>{{$a->disabled_at_text()}}</td>
         <td>{{$a->created_at}}</td>
         <td>{{$a->updated_at}}</td>
@@ -43,11 +39,7 @@
             </form>
             {!! Form::close() !!}
 
-
-            {!! Form::open(array('action' => array('HostController@edit', $a->id), 'method'=>'get')) !!}
-            <button type="submit" class="ui primary button">编辑</button>
-            </form>
-            {!! Form::close() !!}
+            <a href="/host/{{$a->id}}/edit">编辑</a>
 
         </td>
     </tr>

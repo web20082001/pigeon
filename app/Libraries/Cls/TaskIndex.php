@@ -15,6 +15,7 @@ use DB;
 class TaskIndex extends BaseClass
 {
     protected $state = -1;
+    protected $enter_type = -1;
     protected $search = null;
     protected $keywords = null;
     protected $order_by = 'id';
@@ -122,11 +123,19 @@ class TaskIndex extends BaseClass
             $query = $query->where($a . '.state',$this->state);
         }
 
+        if ($this->enter_type == -1) {
+            //不限
+        }else{
+            $query = $query->where($a . '.enter_type',$this->enter_type);
+        }
+
         //查询条件
         if($this->search != '' && $this->keywords != ''){
 
             switch($this->search){
-                case 'remote_addr':
+                case 'name':
+                case 'keyword':
+                case 'url':
                     $query = $query->where($a.'.'.$this->search, 'like','%'.$this->keywords.'%');
                     break;
                 default:
@@ -155,30 +164,33 @@ class TaskIndex extends BaseClass
             $this->request_fill($request);
         }
 
-        $h = App\Task::TABLE;
+        $t = App\Task::TABLE;
+        $u = App\User::TABLE;
 
-        $query = $this->mTask;
+        $query = $this->mTask
+            ->leftJoin($u, $u . '.id', '=', $t . '.user_id');
 
         //查询条件
         $query = $this->search_where($query);
 
         //查询
         $this->tasks = $query->select(DB::raw("
-            $h.id,
-            $h.username,
-            $h.password,
-            $h.memory,
-            $h.area_id,
-            $h.remote_addr,
-            $h.disabled_at,
-            $h.adsl_username,
-            $h.adsl_password,
-            $h.contact,
-            $h.month_fee,
-            $h.quarter_fee,
-            $h.expire_time,
-            $h.created_at,
-            $h.updated_at
+            $t.id,
+            $t.user_id,
+            $t.name,
+            $t.state,
+            $t.enter_type,
+            $t.url,
+            $t.keyword,
+            $t.per_pv,
+            $t.per_pv_spread,
+            $t.start_time,
+            $t.end_time,
+            $t.created_at,
+            $t.updated_at,
+            $u.name AS user_name,
+            $u.realname AS user_realname,
+            $u.email AS user_email
         "))->paginate($this->page_size);
 
         return $this->tasks;
@@ -237,5 +249,13 @@ class TaskIndex extends BaseClass
     public function getState()
     {
         return $this->state;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEnterType()
+    {
+        return $this->enter_type;
     }
 }

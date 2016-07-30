@@ -8,22 +8,20 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App;
 use App\Libraries\Cls;
+use Auth;
 
 
-class UserController extends Controller
+class TaskController extends Controller
 {
-    const CONTROLLER_NAME = 'user';
+    const CONTROLLER_NAME = 'task';
 
-    private $clsUser;
-    private $clsRole;
-    private $clsUserIndex;
+    private $clsTask;
+    private $clsTaskIndex;
 
     function __construct()
     {
-        $this->clsUser = new App\Libraries\Cls\User();
-        $this->clsRole = new App\Libraries\Cls\Role();
-
-        $this->clsUserIndex = new App\Libraries\Cls\UserIndex();
+        $this->clsTask = new App\Libraries\Cls\Task();
+        $this->clsTaskIndex = new App\Libraries\Cls\TaskIndex();
     }
 
     /**
@@ -33,19 +31,21 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $this->clsUserIndex->search($request);
+        $this->clsTaskIndex->search($request);
+
+        var_dump(Auth::check());
 
         //获取数据
-        $users = $this->clsUserIndex->getUsers();
+        $tasks = $this->clsTaskIndex->getTasks();
 
-        $sub_title = '用户列表';
+        $clsTaskIndex = $this->clsTaskIndex;
 
-        $clsUserIndex = $this->clsUserIndex;
+        $sub_title = '任务列表';
 
         return view(self::CONTROLLER_NAME.'/index',compact(
             'sub_title',
-            'users',
-            'clsUserIndex'
+            'tasks',
+            'clsTaskIndex'
         ));
     }
 
@@ -56,13 +56,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        $sub_title = '用户列表';
-        //权限
-        $roles = $this->clsRole->all();
+        $sub_title = '任务列表';
 
         return view(self::CONTROLLER_NAME.'/create',compact(
-            'sub_title',
-            'roles'
+            'sub_title'
         ));
     }
 
@@ -77,15 +74,18 @@ class UserController extends Controller
     {
         $input = $request->only(
             'name',
-            'realname',
-            'password',
-            'email',
-            'disabled_at',
-            'role_id'
+            'state',
+            'enter_type',
+            'url',
+            'keyword',
+            'per_pv',
+            'per_pv_spread',
+            'start_time',
+            'end_time'
         );
 
         //添加
-        $add_rlt = $this->clsUser->add($input);
+        $add_rlt = $this->clsTask->add($input);
 
         if($add_rlt){
             $rsp = $this->withSuccess(redirect()->back(), '添加成功');
@@ -104,18 +104,14 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = $this->clsUser->getById($id);
+        $task = $this->clsTask->getById($id);
 
-        //权限
-        $roles = $this->clsRole->all();
-
-        $sub_title = '用户编辑';
+        $sub_title = '任务列表';
 
         return view(self::CONTROLLER_NAME.'/edit',compact(
             'sub_title',
             'id',
-            'user',
-            'roles'
+            'task'
         ));
     }
 
@@ -129,15 +125,15 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->only(
-            'realname',
-            'email',
-            'role_id',
+            'parent_id',
+            'name',
+            'code',
             'disabled_at'
         );
 
         $input['id'] = $id;
 
-        $up_rlt = $this->clsUser->update($input);
+        $up_rlt = $this->clsTask->update($input);
 
         if($up_rlt){
             $rsp = $this->withSuccess(redirect()->back(), '保存成功');
@@ -177,7 +173,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $del_rlt = $this->clsUser->delete($id);
+        $del_rlt = $this->clsTask->delete($id);
 
         if($del_rlt){
             $rsp = $this->withSuccess(redirect()->back(), '删除成功');

@@ -11,45 +11,13 @@ namespace App\Libraries\Cls;
 use App;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
+use DB;
 
 class Task extends BaseClass{
 
     private $mTask;
     private $mTaskLog;
     private $clsTaskLog;
-
-    /**
-     * 错误原因
-     * @var
-     */
-    private $error_msg;
-
-    /**
-     * @return mixed
-     */
-    public function getErrorMsgs()
-    {
-        return $this->error_msgs;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSuccessMsgs()
-    {
-        return $this->success_msgs;
-    }
-
-    private $error_msgs;
-    private $success_msgs;
-
-    /**
-     * @return mixed
-     */
-    public function getErrorMsg()
-    {
-        return $this->error_msg;
-    }
 
     function __construct(){
         $this->mTask = new App\Task();
@@ -304,5 +272,116 @@ class Task extends BaseClass{
 
         # 是否在可执行列表中
         return in_array($newState,$enable_states);
+    }
+
+    function add($input){
+
+        //开始事务
+        DB::beginTransaction();
+
+        //每小时pv计算
+        $per_pv_spread = $this->per_pv_spread_by_per_pv($input['per_pv']);
+
+        //转为json存储
+        $input['per_pv_spread'] = json_encode($per_pv_spread, JSON_FORCE_OBJECT);
+
+        //更新model
+        $this->mTask = model_update($this->mTask,$input);
+
+        //添加是否成功
+        $task_insert = $this->mTask->save($input);
+
+        if(!$task_insert){
+            $this->error_msgs[] = '任务数据添加失败';
+            DB::rollback();
+            return false;
+        }
+
+        //新增任务id
+        $task_id = $this->mTask->id;
+
+        //任务订单
+        $clsTaskLog = new App\Libraries\Cls\TaskLog();
+
+        //间隔日期
+        $pass_days = $this->pass_days($this->mTask->start_time,$this->mTask->end_time);
+
+        foreach ($pass_days as $date){
+
+            //默认每小时pv
+            foreach($per_pv_spread as $hour => $count){
+
+                if($count > 0){
+
+                    //指定小时
+                    $date_time = date_add_seconds($date, $hour * 3600);
+
+                    //任务订单添加
+                    $add_hours_insert = $clsTaskLog->add_hours($task_id, $date_time, $count);
+
+                    if(!$add_hours_insert){
+                        $this->error_msgs[] = '任务订单数据添加失败';
+                        DB::rollback();
+                        return false;
+                    }
+                }
+
+            }
+        }
+
+        DB::commit();
+        return true;
+    }
+
+    /**
+     * 有效的每小时分布
+     * @return array
+     */
+    function valid_hours_pv(){
+        //默认pv每小时分布
+        $day_hours_pv_percent = Config::get('constants.day_hours_pv_percent');
+
+        //只取大于0的
+        return array_filter ( $day_hours_pv_percent ,function($v){
+            return $v > 0;
+        });
+    }
+
+    /**
+     * 默认每小时分布
+     * @param $per_pv
+     * @return array
+     */
+    function per_pv_spread_by_per_pv($per_pv){
+        //每小时分布
+        $day_hours_pv_percent = Config::get('constants.day_hours_pv_percent');
+
+        $hours_pv = [];
+        foreach($day_hours_pv_percent as $h => $p){
+            $hours_pv[$h] = intval($per_pv * $p / 100);
+        }
+        return $hours_pv;
+    }
+
+    /**
+     * 间隔日期数组
+     * @param $st
+     * @param $ed
+     * @return array
+     */
+    function pass_days($st, $ed){
+
+        //间隔几天
+        $days_count = day_span($st, $ed);
+
+        $start_time = strtotime(short_date(strtotime($st)));
+
+        $days = [];
+
+        foreach(range(0, $days_count) as $i){
+            $days[] = short_date($start_time + (86400 * $i));
+        }
+
+        return $days;
     }
 }

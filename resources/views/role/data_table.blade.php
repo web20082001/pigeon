@@ -37,11 +37,7 @@
             </form>
             {!! Form::close() !!}
 
-
-            {!! Form::open(array('action' => array('RoleController@edit', $a->id), 'method'=>'get')) !!}
-            <button type="submit" class="ui primary button">编辑</button>
-            </form>
-            {!! Form::close() !!}
+            <a href="/role/{{$a->id}}/edit">编辑</a>
 
         </td>
     </tr>

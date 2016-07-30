@@ -10,20 +10,19 @@ use App;
 use App\Libraries\Cls;
 
 
-class UserController extends Controller
+class HostProxyController extends Controller
 {
-    const CONTROLLER_NAME = 'user';
+    const CONTROLLER_NAME = 'host_proxy';
 
-    private $clsUser;
-    private $clsRole;
-    private $clsUserIndex;
+    private $clsHostProxy;
+    private $clsHostProxyIndex;
+    private $clsArea;
 
     function __construct()
     {
-        $this->clsUser = new App\Libraries\Cls\User();
-        $this->clsRole = new App\Libraries\Cls\Role();
-
-        $this->clsUserIndex = new App\Libraries\Cls\UserIndex();
+        $this->clsHostProxy = new App\Libraries\Cls\HostProxy();
+        $this->clsHostProxyIndex = new App\Libraries\Cls\HostProxyIndex();
+        $this->clsArea = new App\Libraries\Cls\Area();
     }
 
     /**
@@ -33,19 +32,23 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $this->clsUserIndex->search($request);
+        $this->clsHostProxyIndex->search($request);
 
         //获取数据
-        $users = $this->clsUserIndex->getUsers();
+        $host_proxys = $this->clsHostProxyIndex->getHostProxys();
 
-        $sub_title = '用户列表';
+        // 地区
+        $areas = $this->clsArea->all();
 
-        $clsUserIndex = $this->clsUserIndex;
+        $clsHostProxyIndex = $this->clsHostProxyIndex;
+
+        $sub_title = '主机列表';
 
         return view(self::CONTROLLER_NAME.'/index',compact(
             'sub_title',
-            'users',
-            'clsUserIndex'
+            'host_proxys',
+            'clsHostProxyIndex',
+            'areas'
         ));
     }
 
@@ -56,13 +59,14 @@ class UserController extends Controller
      */
     public function create()
     {
-        $sub_title = '用户列表';
-        //权限
-        $roles = $this->clsRole->all();
+        // 地区
+        $areas = $this->clsArea->all();
+
+        $sub_title = '主机列表';
 
         return view(self::CONTROLLER_NAME.'/create',compact(
             'sub_title',
-            'roles'
+            'areas'
         ));
     }
 
@@ -76,16 +80,22 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $input = $request->only(
-            'name',
-            'realname',
+            'username',
             'password',
-            'email',
+            'memory',
+            'area_id',
+            'remote_addr',
             'disabled_at',
-            'role_id'
+            'adsl_username',
+            'adsl_password',
+            'contact',
+            'month_fee',
+            'quarter_fee',
+            'expire_time'
         );
 
         //添加
-        $add_rlt = $this->clsUser->add($input);
+        $add_rlt = $this->clsHostProxy->add($input);
 
         if($add_rlt){
             $rsp = $this->withSuccess(redirect()->back(), '添加成功');
@@ -104,18 +114,17 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = $this->clsUser->getById($id);
+        $host_proxy = $this->clsHostProxy->getById($id);
+        // 地区
+        $areas = $this->clsArea->all();
 
-        //权限
-        $roles = $this->clsRole->all();
-
-        $sub_title = '用户编辑';
+        $sub_title = '主机列表';
 
         return view(self::CONTROLLER_NAME.'/edit',compact(
             'sub_title',
             'id',
-            'user',
-            'roles'
+            'host_proxy',
+            'areas'
         ));
     }
 
@@ -129,15 +138,23 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->only(
-            'realname',
-            'email',
-            'role_id',
-            'disabled_at'
+            'username',
+            'password',
+            'memory',
+            'area_id',
+            'remote_addr',
+            'disabled_at',
+            'adsl_username',
+            'adsl_password',
+            'contact',
+            'month_fee',
+            'quarter_fee',
+            'expire_time'
         );
 
         $input['id'] = $id;
 
-        $up_rlt = $this->clsUser->update($input);
+        $up_rlt = $this->clsHostProxy->update($input);
 
         if($up_rlt){
             $rsp = $this->withSuccess(redirect()->back(), '保存成功');
@@ -177,7 +194,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $del_rlt = $this->clsUser->delete($id);
+        $del_rlt = $this->clsHostProxy->delete($id);
 
         if($del_rlt){
             $rsp = $this->withSuccess(redirect()->back(), '删除成功');

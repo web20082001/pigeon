@@ -116,9 +116,8 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->only(
-            'parent_id',
             'name',
-            'code',
+            'memo',
             'disabled_at'
         );
 

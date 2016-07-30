@@ -9,7 +9,7 @@
 namespace App\Libraries\Cls;
 use App;
 
-class HostProxy  extends BaseClass
+class HostProxy extends BaseClass
 {
     private $mHostProxy;
 
@@ -21,5 +21,15 @@ class HostProxy  extends BaseClass
     function add($input){
         $this->mHostProxy = model_update($this->mHostProxy,$input);
         return $this->mHostProxy->save($input);
+    }
+
+    function getByHostId($host_id){
+        return $this->mHostProxy->where('host_id',$host_id)
+        ->first();
+    }
+
+    function updateByHostId($host_id,$upItems){
+        return $this->mHostProxy->where('host_id',$host_id)
+            ->update($upItems);
     }
 }

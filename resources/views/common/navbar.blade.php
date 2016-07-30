@@ -2,6 +2,11 @@
     <div class="header item">
         <a href="/">首页</a>
     </div>
+
+    <a class="item" href="/task">
+        任务管理
+    </a>
+
     <a class="item" href="/area">
         地区管理
     </a>
@@ -47,7 +52,10 @@
                 <button class="ui button">Submit</button>
             </div>
         </div>
-        <a class="item active">退出</a>
+
+        {{Auth::user()->name }}
+
+        <a class="item active" href="/auth/logout">退出</a>
     </div>
 
 

@@ -19,10 +19,10 @@ class CreateTaskLogTable extends Migration
             $table->increments('id');
             $table->integer('task_id');
             $table->timestamp('expect_time');
-            $table->timestamp('start_time');
-            $table->timestamp('end_time');
-            $table->string('addr',30);
-            $table->integer('host_id');
+            $table->timestamp('start_time')->nullable();
+            $table->timestamp('end_time')->nullable();
+            $table->string('addr',30)->nullable();
+            $table->integer('host_id')->nullable();
             $table->timestamps();
         });
     }

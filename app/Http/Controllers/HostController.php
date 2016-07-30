@@ -16,11 +16,13 @@ class HostController extends Controller
 
     private $clsHost;
     private $clsHostIndex;
+    private $clsArea;
 
     function __construct()
     {
         $this->clsHost = new App\Libraries\Cls\Host();
         $this->clsHostIndex = new App\Libraries\Cls\HostIndex();
+        $this->clsArea = new App\Libraries\Cls\Area();
     }
 
     /**
@@ -34,9 +36,6 @@ class HostController extends Controller
 
         //获取数据
         $hosts = $this->clsHostIndex->getHosts();
-
-        var_dump($hosts);
-        exit;
 
         $clsHostIndex = $this->clsHostIndex;
 
@@ -56,10 +55,14 @@ class HostController extends Controller
      */
     public function create()
     {
+        // 地区
+        $areas = $this->clsArea->all();
+
         $sub_title = '主机列表';
 
         return view(self::CONTROLLER_NAME.'/create',compact(
-            'sub_title'
+            'sub_title',
+            'areas'
         ));
     }
 
@@ -73,10 +76,18 @@ class HostController extends Controller
     public function store(Request $request)
     {
         $input = $request->only(
-            'parent_id',
-            'name',
-            'code',
-            'disabled_at'
+            'username',
+            'password',
+            'memory',
+            'area_id',
+            'remote_addr',
+            'disabled_at',
+            'adsl_username',
+            'adsl_password',
+            'contact',
+            'month_fee',
+            'quarter_fee',
+            'expire_time'
         );
 
         //添加
@@ -100,13 +111,16 @@ class HostController extends Controller
     public function edit($id)
     {
         $host = $this->clsHost->getById($id);
+        // 地区
+        $areas = $this->clsArea->all();
 
         $sub_title = '主机列表';
 
         return view(self::CONTROLLER_NAME.'/edit',compact(
             'sub_title',
             'id',
-            'host'
+            'host',
+            'areas'
         ));
     }
 
@@ -120,10 +134,18 @@ class HostController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->only(
-            'parent_id',
-            'name',
-            'code',
-            'disabled_at'
+            'username',
+            'password',
+            'memory',
+            'area_id',
+            'remote_addr',
+            'disabled_at',
+            'adsl_username',
+            'adsl_password',
+            'contact',
+            'month_fee',
+            'quarter_fee',
+            'expire_time'
         );
 
         $input['id'] = $id;

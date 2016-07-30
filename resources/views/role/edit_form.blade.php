@@ -7,7 +7,7 @@
 </div>
 <div class="field">
     <label>描述</label>
-    <input type="text" name="code" value="{{$role->memo}}">
+    <input type="text" name="memo" value="{{$role->memo}}">
 </div>
 
 <div class="inline fields">

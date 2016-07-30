@@ -19,7 +19,7 @@ return [
             ],
 
             # 进入方式
-            'traffic_type' => [
+            'enter_type' => [
                 1 => '搜索'
             ]
         ]

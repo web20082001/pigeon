@@ -15,8 +15,7 @@ class HostProxyIndex extends BaseClass
 {
 
     protected $disabled_at = -1;
-
-
+    protected $area_id = -1;
     protected $search = null;
     protected $keywords = null;
     protected $order_by = 'id';
@@ -115,26 +114,35 @@ class HostProxyIndex extends BaseClass
     function search_where($query)
     {
         //表别名
-        $a = App\HostProxy::TABLE;
+        $hp = App\HostProxy::TABLE;
+        $h = App\Host::TABLE;
 
         //故障状态
         if ($this->disabled_at == -1) {
             //不限
         }else if ($this->disabled_at == 0) {
             //启用
-            $query = $query->whereNull($a . '.disabled_at');
+            $query = $query->whereNull($hp . '.disabled_at');
         } else if ($this->disabled_at == 1){
             //禁用
-            $query = $query->whereNotNull($a . '.disabled_at');
+            $query = $query->whereNotNull($hp . '.disabled_at');
         }
+
+
+        //地区
+        if ($this->area_id == -1) {
+            //不限
+        }else {
+            $query = $query->where($h .'.area_id',$this->area_id);
+        }
+
 
         //查询条件
         if($this->search != '' && $this->keywords != ''){
 
             switch($this->search){
-                case 'name':
-                case 'code':
-                    $query = $query->where($a.'.'.$this->search, 'like','%'.$this->keywords.'%');
+                case 'addr':
+                    $query = $query->where($hp.'.'.$this->search, 'like','%'.$this->keywords.'%');
                     break;
                 default:
                     break;
@@ -162,24 +170,27 @@ class HostProxyIndex extends BaseClass
             $this->request_fill($request);
         }
 
-        $a = App\HostProxy::TABLE;
+        $a = App\Area::TABLE;
+        $h = App\Host::TABLE;
+        $hp = App\HostProxy::TABLE;
 
-        $query = $this->mHostProxy;
+        $query = $this->mHostProxy
+            ->leftJoin($h, $h . '.id', '=', $hp . '.host_id')
+            ->leftJoin($a, $a . '.id', '=', $h . '.area_id');
 
         //查询条件
         $query = $this->search_where($query);
 
         //查询
         $this->hostProxys = $query->select(DB::raw("
-            $a.id,
-            $a.parent_id,
-            $a.level,
-            $a.name,
-            $a.code,
-            $a.order_sort,
-            $a.disabled_at,
-            $a.created_at,
-            $a.updated_at
+            $hp.id,
+            $hp.host_id,
+            $hp.addr,
+            $hp.area_id,
+            $hp.created_at,
+            $hp.updated_at,
+            $a.name AS area_name,
+            $h.remote_addr
         "))->paginate($this->page_size);
 
         return $this->hostProxys;
@@ -238,5 +249,13 @@ class HostProxyIndex extends BaseClass
     public function getDisabledAt()
     {
         return $this->disabled_at;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAreaId()
+    {
+        return $this->area_id;
     }
 }

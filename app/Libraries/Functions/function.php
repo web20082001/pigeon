@@ -94,6 +94,16 @@ function full_date($time = null){
     return date('Y-m-d H:i:s',$time);
 }
 
+
+function short_date($time = null){
+
+    if(is_null($time)){
+        $time = time();
+    }
+    return date('Y-m-d',$time);
+}
+
+
 /**
  * 今天
  * @return bool|string
@@ -289,4 +299,54 @@ function model_update($model, $upItems){
         $model->$k = $v;
     }
     return $model;
+}
+
+function disabled_at_convert($value){
+
+    $disabled_values = [
+        '0' => null,
+        '1' => full_date()
+    ];
+
+    return $disabled_values[$value];
+}
+
+function disabled_at_text($value){
+
+    if(is_null($value)){
+        $val = '启用';
+    }else{
+        $val = '禁用';
+    }
+
+    return $val;
+}
+
+/**
+ * 两日期天数间隔
+ * @param $d1
+ * @param $d2
+ * @return float
+ */
+function day_span($d1,$d2){
+
+    $time_span = abs(strtotime($d2) - strtotime($d1));
+
+    return floor($time_span / 86400);
+}
+
+/**
+ * 当前小时
+ * @return bool|string
+ */
+function current_date_hours(){
+    return date('Y-m-d H:00:00');
+}
+
+/**
+ * 下一小时
+ * @return bool|string
+ */
+function next_date_hours(){
+    return  full_date(strtotime(date('Y-m-d H:00:00')) + 3600 -1);
 }

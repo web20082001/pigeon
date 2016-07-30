@@ -1,8 +1,5 @@
 {!! Form::open(array('action' => array('UserController@index'), 'method'=>'get')) !!}
 
-<form class="ui form">
-
-
     <h4 class="ui header">状态</h4>
     {!! Form::select(
       'disabled_at',
@@ -16,12 +13,10 @@
     <h4 class="ui header">查询条件</h4>
     {!! Form::select(
         'search',
-        Lang::get('search.User'),
+        Lang::get('search.user'),
         $clsUserIndex->getSearch(),
         array('class'=>'ui fluid normal dropdown'))
     !!}
-
-
 
 
     <h4 class="ui header">关键词</h4>
@@ -32,5 +27,6 @@
 
     {!! Form::submit('查询',['class'=>'ui primary button','id'=>'btnSearch']) !!}
 
-</form>
+    <a href="/user/create">新增</a>
+
 {!! Form::close() !!}

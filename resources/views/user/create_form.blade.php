@@ -1,17 +1,32 @@
 {!! Form::open(array('action' => array('UserController@store'),'class'=>'ui form')) !!}
 
     <div class="field">
-        <label>所属上级</label>
-        <input type="text" name="parent_id" value="0">
-    </div>
-    <div class="field">
-        <label>地区名称</label>
+        <label>用户名</label>
         <input type="text" name="name">
     </div>
     <div class="field">
-        <label>地区编号</label>
-        <input type="text" name="code">
+        <label>密码</label>
+        <input type="password" name="password">
     </div>
+
+    <div class="field">
+        <label>真实姓名</label>
+        <input type="text" name="realname">
+    </div>
+
+    <div class="field">
+        <label>邮箱</label>
+        <input type="text" name="email">
+    </div>
+
+    <h4 class="ui header">权限</h4>
+    <select name="role_id" class="ui fluid normal dropdown">
+        <option value="-1">不限</option>
+        @foreach ($roles as $r)
+            <option value="{{$r->id}}">{{$r->name}}</option>
+        @endforeach
+    </select>
+
 
     <div class="inline fields">
         <label for="fruit">状态</label>

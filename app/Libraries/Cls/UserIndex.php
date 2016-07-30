@@ -133,7 +133,8 @@ class UserIndex extends BaseClass
 
             switch($this->search){
                 case 'name':
-                case 'code':
+                case 'realname':
+                case 'email':
                     $query = $query->where($a.'.'.$this->search, 'like','%'.$this->keywords.'%');
                     break;
                 default:
@@ -162,24 +163,27 @@ class UserIndex extends BaseClass
             $this->request_fill($request);
         }
 
-        $a = App\User::TABLE;
+        $u = App\User::TABLE;
+        $r = App\Role::TABLE;
 
-        $query = $this->mUser;
+        $query = $this->mUser
+            ->leftJoin($r, $r . '.id', '=', $u . '.role_id');
 
         //查询条件
         $query = $this->search_where($query);
 
         //查询
         $this->users = $query->select(DB::raw("
-            $a.id,
-            $a.parent_id,
-            $a.level,
-            $a.name,
-            $a.code,
-            $a.order_sort,
-            $a.disabled_at,
-            $a.created_at,
-            $a.updated_at
+            $u.id,
+            $u.name,
+            $u.realname,
+            $u.email,
+            $u.password,
+            $u.disabled_at,
+            $u.role_id,
+            $u.created_at,
+            $u.updated_at,
+            $r.name AS role_name
         "))->paginate($this->page_size);
 
         return $this->users;

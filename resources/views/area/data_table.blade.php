@@ -43,11 +43,7 @@
             </form>
             {!! Form::close() !!}
 
-
-            {!! Form::open(array('action' => array('AreaController@edit', $a->id), 'method'=>'get')) !!}
-            <button type="submit" class="ui primary button">编辑</button>
-            </form>
-            {!! Form::close() !!}
+            <a href="/area/{{$a->id}}/edit">编辑</a>
 
         </td>
     </tr>

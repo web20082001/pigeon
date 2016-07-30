@@ -15,6 +15,15 @@ use Maatwebsite\Excel\Facades\Excel as ExcelTools;
 abstract class BaseClass
 {
     protected $model;
+
+    /**
+     * 错误原因
+     * @var
+     */
+    protected $error_msg;
+    protected $error_msgs;
+    protected $success_msgs;
+
     /**
      *
      * @param $query
@@ -48,6 +57,7 @@ abstract class BaseClass
         return $disabled_values[$value];
     }
 
+
     public function disabledConvert($value){
 
         $disabled_values = [
@@ -70,6 +80,20 @@ abstract class BaseClass
         return ($val == $equal) ? $true:$false;
     }
 
+    /**
+     * 获取所有
+     * @return mixed
+     */
+    function all(){
+        return $this->model->all();
+    }
+
+    /**
+     * 获取单个
+     * @param $id
+     * @param null $with
+     * @return mixed
+     */
     function getById($id,$with=null){
 
         $query = $this->model->where('id',$id);
@@ -81,6 +105,11 @@ abstract class BaseClass
         return $query->firstOrFail();
     }
 
+    /**
+     * 更新
+     * @param $upItems
+     * @return bool
+     */
     function update($upItems){
 
         if(array_key_exists('id',$upItems)){
@@ -91,6 +120,7 @@ abstract class BaseClass
             $model = $this->getById($id);
 
             $model = model_update($model, $upItems);
+
             return $model->save();
 
         }else{
@@ -98,8 +128,36 @@ abstract class BaseClass
         }
     }
 
+    /**
+     * 删除
+     * @param $id
+     * @return mixed
+     */
     function delete($id){
         return $this->getById($id)->delete();
     }
 
+
+    /**
+     * @return mixed
+     */
+    public function getErrorMsgs()
+    {
+        return $this->error_msgs;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSuccessMsgs()
+    {
+        return $this->success_msgs;
+    }
+    /**
+     * @return mixed
+     */
+    public function getErrorMsg()
+    {
+        return $this->error_msg;
+    }
 }

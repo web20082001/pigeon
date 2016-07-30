@@ -157,8 +157,10 @@ class HostIndex extends BaseClass
         }
 
         $h = App\Host::TABLE;
+        $a = App\Area::TABLE;
 
-        $query = $this->mHost;
+        $query = $this->mHost
+            ->leftJoin($a, $a . '.id', '=', $h . '.area_id');
 
         //查询条件
         $query = $this->search_where($query);
@@ -179,7 +181,8 @@ class HostIndex extends BaseClass
             $h.quarter_fee,
             $h.expire_time,
             $h.created_at,
-            $h.updated_at
+            $h.updated_at,
+            $a.name AS area_name
         "))->paginate($this->page_size);
 
         return $this->hosts;

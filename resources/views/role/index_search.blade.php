@@ -1,8 +1,5 @@
 {!! Form::open(array('action' => array('RoleController@index'), 'method'=>'get')) !!}
 
-<form class="ui form">
-
-
     <h4 class="ui header">状态</h4>
     {!! Form::select(
       'disabled_at',
@@ -32,5 +29,6 @@
 
     {!! Form::submit('查询',['class'=>'ui primary button','id'=>'btnSearch']) !!}
 
-</form>
+    <a href="/role/create">新增</a>
+
 {!! Form::close() !!}
