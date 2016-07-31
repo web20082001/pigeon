@@ -33,11 +33,11 @@
             {!! Form::open(array('action' => array('RoleController@destroy', $a->id), 'method'=>'post')) !!}
                 <input name="_method" type="hidden" value="delete">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <button type="submit" class="ui primary button">删除</button>
+                <a class="delete">删除</a>
+                <button type="submit" class="hidden">删除</button>
+                <a href="/role/{{$a->id}}/edit">编辑</a>
             </form>
             {!! Form::close() !!}
-
-            <a href="/role/{{$a->id}}/edit">编辑</a>
 
         </td>
     </tr>

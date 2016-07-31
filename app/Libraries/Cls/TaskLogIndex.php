@@ -162,24 +162,29 @@ class TaskLogIndex extends BaseClass
             $this->request_fill($request);
         }
 
-        $a = App\TaskLog::TABLE;
+        $tl = App\TaskLog::TABLE;
+        $h = App\Host::TABLE;
+        $a = App\Area::TABLE;
 
-        $query = $this->mTaskLog;
+        $query = $this->mTaskLog
+            ->leftJoin($h, $h . '.id', '=', $tl . '.host_id')
+            ->leftJoin($a, $a . '.id', '=', $h . '.area_id');
 
         //查询条件
         $query = $this->search_where($query);
 
         //查询
         $this->taskLogs = $query->select(DB::raw("
-            $a.id,
-            $a.parent_id,
-            $a.level,
-            $a.name,
-            $a.code,
-            $a.order_sort,
-            $a.disabled_at,
-            $a.created_at,
-            $a.updated_at
+            $tl.id,
+            $tl.task_id,
+            $tl.expect_time,
+            $tl.start_time,
+            $tl.end_time,
+            $tl.addr,
+            $tl.host_id,
+            $tl.created_at,
+            $tl.updated_at,
+            $a.name AS area_name
         "))->paginate($this->page_size);
 
         return $this->taskLogs;

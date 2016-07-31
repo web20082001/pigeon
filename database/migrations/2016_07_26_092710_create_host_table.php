@@ -21,6 +21,7 @@ class CreateHostTable extends Migration
             $table->string('password',32);
             $table->string('memory',10);
             $table->integer('area_id');
+            $table->string('code',32)->unique();
             $table->string('remote_addr',30);
             $table->timestamp('disabled_at')->nullable();
             $table->string('adsl_username',100);

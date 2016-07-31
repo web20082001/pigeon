@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use Validator;
+use Illuminate\Http\Request;
+use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -28,7 +30,7 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/task';
     protected $redirectAfterLogout = 'auth/login';
 
     /**
@@ -39,6 +41,12 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware($this->guestMiddleware(), ['except' => 'getLogout']);
+    }
+
+    protected function getCredentials(Request $request){
+        $data = $request->only($this->loginUsername(), 'password');
+        $data['disabled_at'] = null;
+        return $data;
     }
 
     /**

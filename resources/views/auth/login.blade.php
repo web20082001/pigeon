@@ -11,13 +11,13 @@
 <form method="POST" action="/auth/login">
     {!! csrf_field() !!}
     <div>
-        用户名
-        <input type="text" name="email" placeholder="用户名" value="{{ old('email') }}">
+        邮箱
+        <input type="text" name="email" placeholder="邮箱" value="{{ old('email') }}">
 
     </div>
 
     <div>
-        Password
+        密码
         <input type="password" name="password" id="password">
     </div>
 

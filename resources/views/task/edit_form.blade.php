@@ -7,12 +7,12 @@
 
 <div class="field">
     <label>关键词</label>
-    <input type="text" name="keyword" value="{{$task->keyword}}">
+    {{$task->keyword}}
 </div>
 
 <div class="field">
     <label>链接</label>
-    <input type="text" name="url" value="{{$task->url}}">
+    {{$task->url}}
 </div>
 
 <div class="field">
@@ -37,12 +37,7 @@
 
 <div class="field">
     <label>日PV</label>
-    <input type="text" name="per_pv" value="{{$task->per_pv}}">
-</div>
-
-<div class="field">
-    <label>日PV分布</label>
-    <input type="text" name="per_pv_spread" value="{{$task->per_pv_spread}}">
+    {{$task->per_pv}}
 </div>
 
 <div class="field">

@@ -22,4 +22,55 @@ class User extends BaseClass
         $this->mUser = model_update($this->mUser,$input);
         return $this->mUser->save($input);
     }
+
+    /**
+     * 修改密码
+     * @param $user_id
+     * @param $new_password
+     * @param null $old_password
+     * @return bool
+     */
+    function password_change($user_id,$new_password,$old_password=null){
+
+        //用户
+        $user = $this->getById($user_id);
+
+        if(!is_null($old_password)){
+            //验证原密码是否正确
+            $is_pass = $this->password_check($user_id, $old_password);
+
+            if(!$is_pass){
+                $this->error_msg = '原密码不正确';
+                return false;
+            }
+        }
+
+        //密码正确
+        $user->password = $this->password_bcrypt($new_password);
+        return $user->save();
+    }
+
+    /**
+     * 校验密码是否正确
+     * @param $user_id
+     * @param $old_password
+     * @return bool
+     */
+    function password_check($user_id, $old_password){
+
+        //用户
+        $user = $this->getById($user_id);
+
+        //验证原密码是否正确
+        if($this->password_bcrypt($old_password) == $user->password){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    function password_bcrypt($password){
+        return bcrypt($password);
+    }
 }

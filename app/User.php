@@ -49,4 +49,16 @@ class User extends Authenticatable
     {
         return disabled_at_text($this->disabled_at);
     }
+
+    /**
+     * Set the user's first name.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
+
 }

@@ -22,4 +22,8 @@ class Host  extends BaseClass
         $this->mHost = model_update($this->mHost,$input);
         return $this->mHost->save($input);
     }
+
+    function getByCode($code){
+        return $this->mHost->where('code',$code)->first();
+    }
 }

@@ -2,7 +2,8 @@
 
 <div class="field">
     <label>所属上级</label>
-    <input type="text" name="parent_id" value="{{$area->parent_id}}">
+    {{$parent_name}}
+    <input type="hidden" name="parent_id" value="{{$area->parent_id}}">
 </div>
 <div class="field">
     <label>地区名称</label>
@@ -12,7 +13,10 @@
     <label>地区编号</label>
     <input type="text" name="code" value="{{$area->code}}">
 </div>
-
+<div class="field">
+    <label>排序</label>
+    <input type="text" name="order_sort" value="{{$area->order_sort}}">
+</div>
 <div class="inline fields">
     <label for="fruit">状态</label>
     <div class="field">

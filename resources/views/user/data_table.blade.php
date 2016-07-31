@@ -42,11 +42,14 @@
             {!! Form::open(array('action' => array('UserController@destroy', $a->id), 'method'=>'post')) !!}
                 <input name="_method" type="hidden" value="delete">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <button type="submit" class="ui primary button">删除</button>
+                <a class="delete">删除</a>
+                <button type="submit" class="hidden">删除</button>
+                <a href="/user/{{$a->id}}/edit">编辑</a>
             </form>
             {!! Form::close() !!}
 
-            <a href="/user/{{$a->id}}/edit">编辑</a>
+
+            {{--<a href="/user/{{$a->id}}/password">密码</a>--}}
 
         </td>
     </tr>

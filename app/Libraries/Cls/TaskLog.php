@@ -10,6 +10,7 @@ namespace App\Libraries\Cls;
 use App;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Support\Facades\Config;
 
 class TaskLog extends BaseClass
 {
@@ -224,5 +225,35 @@ class TaskLog extends BaseClass
             //已保存成功
             return true;
         }
+    }
+
+    /**
+     * 回收超时未完成的订单
+     * @return mixed
+     */
+    function recycleTaskLogs(){
+
+        //超时分钟数
+        $recycle_timeout_minutes = Config::get('constants.recycle_timeout_minutes');
+
+        $t = App\Task::TABLE;
+        $tl = App\TaskLog::TABLE;
+
+        //超时时间
+        $timeout_datetime = full_date(time() - $recycle_timeout_minutes * 60);
+
+        //先获取是否已领到未完成的
+        return $this->mTaskLog
+            ->join($t, $t . '.id', '=', $tl . '.task_id')
+            ->whereNotNull($tl.'.start_time')
+            ->whereNotNull($tl.'.host_id')
+            ->whereNull($tl.'.end_time')
+            ->where($t.'.state',App\Task::START)
+            ->where($tl.'.start_time','<',$timeout_datetime)
+            ->update([
+                $tl.'.start_time'=> null,
+                $tl.'.addr'=> null,
+                $tl.'.host_id'=> null
+            ]);
     }
 }

@@ -70,7 +70,7 @@ class ApiController extends Controller
         $input = $request->only([
             'action',
             'id',
-            'host_id',
+            'code',
             'addr'
         ]);
 
@@ -80,7 +80,7 @@ class ApiController extends Controller
         switch($action){
             case 'order':
                 //获取订单
-                return $this->getOrder($input['host_id']);
+                return $this->getOrder($input['code']);
                 break;
 
             case 'finish':
@@ -96,7 +96,7 @@ class ApiController extends Controller
 
             case 'host_proxy':
                 //获取主机的代理ip
-                $host_proxy = $this->clsApi->host_proxy($input['host_id']);
+                $host_proxy = $this->clsApi->host_proxy($input['code']);
                 if($host_proxy){
                     $resp = $this->json_success('代理IP获取成功',$host_proxy->toArray());
                 }else{
@@ -108,7 +108,7 @@ class ApiController extends Controller
             case 'host_proxy_update':
 
                 //获取主机的代理ip
-                $is_success = $this->clsApi->host_proxy_update($input['host_id'], $input['addr']);
+                $is_success = $this->clsApi->host_proxy_update($input['code'], $input['addr']);
 
                 if($is_success){
                     $resp = $this->json_success('代理IP更新成功');
@@ -143,13 +143,13 @@ class ApiController extends Controller
 
     /**
      * 获取订单
-     * @param $host_id
+     * @param $code
      * @return \Illuminate\Http\JsonResponse
      */
-    private function getOrder($host_id){
+    private function getOrder($code){
 
         //领任务
-        $task_log = $this->clsApi->getTaskLog($host_id);
+        $task_log = $this->clsApi->getTaskLog($code);
 
         if(is_null($task_log)){
             $rsp = $this->json_error('暂无任务订单');

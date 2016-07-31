@@ -1,0 +1,30 @@
+<table class="ui celled table">
+    <thead>
+    <tr>
+        <th>任务编号</th>
+        <th>任务名称</th>
+        <th>状态</th>
+        <th>进入类型</th>
+        <th>链接</th>
+        <th>关键词</th>
+        <th>日PV</th>
+        <th>开始日期</th>
+        <th>结束日期</th>
+        <th>任务创建日期</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{$task->id}}</td>
+            <td>{{$task->name}}</td>
+            <td>{{$task->state_text()}}</td>
+            <td>{{$task->enter_type_text()}}</td>
+            <td>{{$task->url}}</td>
+            <td>{{$task->keyword}}</td>
+            <td>{{$task->per_pv}}</td>
+            <td>{{$task->start_time}}</td>
+            <td>{{$task->end_time}}</td>
+            <td>{{$task->created_at}}</td>
+        </tr>
+    </tbody>
+</table>

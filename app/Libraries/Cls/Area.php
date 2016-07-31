@@ -22,4 +22,20 @@ class Area extends BaseClass
         $this->mArea = model_update($this->mArea,$input);
         return $this->mArea->save($input);
     }
+
+    /**
+     * 排序最大值
+     */
+    function order_sort_max(){
+
+        $area = $this->mArea->orderBy('order_sort', 'desc')->first();
+
+        $max = 0;
+
+        if($area){
+            $max = intval($area->order_sort);
+        }
+
+        return $max;
+    }
 }

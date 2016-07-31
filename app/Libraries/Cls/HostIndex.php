@@ -171,6 +171,7 @@ class HostIndex extends BaseClass
             $h.username,
             $h.password,
             $h.memory,
+            $h.code,
             $h.area_id,
             $h.remote_addr,
             $h.disabled_at,

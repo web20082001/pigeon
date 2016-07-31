@@ -120,6 +120,30 @@ class UserController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function password($id)
+    {
+        $user = $this->clsUser->getById($id);
+
+        //权限
+        $roles = $this->clsRole->all();
+
+        $sub_title = '密码修改';
+
+        return view(self::CONTROLLER_NAME.'/password',compact(
+            'sub_title',
+            'id',
+            'user',
+            'roles'
+        ));
+    }
+
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -152,13 +176,28 @@ class UserController extends Controller
     public function postAction(Request $request){
 
         //验证是否是本组的
-        $input = $request->only(['action']);
+        $input = $request->only([
+            'action',
+            'user_id',
+            'old_password',
+            'new_password'
+        ]);
 
         //动作
         $action = $input['action'];
 
         switch($action){
-            case '':
+            case 'password_edit':
+
+                $input['old_password'] = null;
+                //修改密码
+                $change_success = $this->clsUser->password_change($input['user_id'],$input['new_password'],$input['old_password']);
+
+                if($change_success){
+                    $rsp = $this->withSuccess(redirect()->back(), '密码修改成功');
+                }else{
+                    $rsp = $this->withSuccess(redirect()->back(), '密码修改失败:'.$this->clsUser->getErrorMsg());
+                }
 
                 break;
             default:

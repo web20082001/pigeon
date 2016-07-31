@@ -2,6 +2,9 @@
     <thead>
     <tr>
         <th>
+            <a href="{!! $clsAreaIndex->getBaseLink('parent_id') !!}">上级</a>
+        </th>
+        <th>
             <a href="{!! $clsAreaIndex->getBaseLink('name') !!}">名称</a>
         </th>
         <th>
@@ -27,6 +30,7 @@
     <tbody>
     @foreach ($areas as $a)
     <tr>
+        <td>{{$a->parent_name}}</td>
         <td>{{$a->name}}</td>
         <td>{{$a->code}}</td>
         <td>{{$a->order_sort}}</td>
@@ -39,11 +43,12 @@
             {!! Form::open(array('action' => array('AreaController@destroy', $a->id), 'method'=>'post')) !!}
                 <input name="_method" type="hidden" value="delete">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <button type="submit" class="ui primary button">删除</button>
+                <a class="delete">删除</a>
+                <button type="submit" class="hidden">删除</button>
+                <a href="/area/{{$a->id}}/edit">编辑</a>
+                <a href="/area/create?parent_id={{$a->id}}">添加</a>
             </form>
             {!! Form::close() !!}
-
-            <a href="/area/{{$a->id}}/edit">编辑</a>
 
         </td>
     </tr>
@@ -51,7 +56,7 @@
     </tbody>
     <tfoot>
     <tr>
-        <th colspan="7">
+        <th colspan="8">
             {!! $areas->render() !!}
         </th>
     </tr>

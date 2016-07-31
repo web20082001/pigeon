@@ -28,6 +28,4 @@
 
     {!! Form::submit('查询',['class'=>'ui primary button','id'=>'btnSearch']) !!}
 
-    <a href="/host_proxy/create">新增</a>
-
 {!! Form::close() !!}

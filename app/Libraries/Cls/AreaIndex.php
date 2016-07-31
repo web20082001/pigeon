@@ -20,7 +20,7 @@ class AreaIndex extends BaseClass
     protected $search = null;
     protected $keywords = null;
     protected $order_by = 'id';
-    protected $dir = 'desc';
+    protected $dir = 'asc';
     protected $page_size;
     //类
     protected $mArea;
@@ -163,11 +163,13 @@ class AreaIndex extends BaseClass
         }
 
         $a = App\Area::TABLE;
+        $as = 'area_parent';
 
         $query = $this->mArea;
 
         //查询条件
-        $query = $this->search_where($query);
+        $query = $this->search_where($query)
+            ->leftJoin($a.' AS '.$as, $as . '.id', '=', $a . '.parent_id');
 
         //查询
         $this->areas = $query->select(DB::raw("
@@ -179,7 +181,11 @@ class AreaIndex extends BaseClass
             $a.order_sort,
             $a.disabled_at,
             $a.created_at,
-            $a.updated_at
+            $a.updated_at,
+            
+            $as.name AS parent_name, 
+            $as.level AS parent_level,
+            $as.code AS parent_code
         "))->paginate($this->page_size);
 
         return $this->areas;

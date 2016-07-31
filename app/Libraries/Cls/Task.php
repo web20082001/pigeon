@@ -22,6 +22,7 @@ class Task extends BaseClass{
     function __construct(){
         $this->mTask = new App\Task();
         $this->mTaskLog = new App\TaskLog();
+        $this->model = $this->mTask;
     }
 
     function getByTaskLogIds($task_order_ids){
@@ -42,17 +43,6 @@ class Task extends BaseClass{
         $query = $this->mTask->whereIn('id',$task_ids);
 
         return $query->get();
-    }
-
-    function getById($id,$with=null){
-
-        $query = $this->mTask->where('id',$id);
-
-        if(!is_null($with)){
-            $query->with($with);
-        }
-
-        return $query->firstOrFail();
     }
 
     function getByIdNoFail($id,$with=null){

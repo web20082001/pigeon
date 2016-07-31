@@ -1,0 +1,30 @@
+section{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/*分页*/
+.pagination {
+    float: right;
+}
+.pagination li{
+    position: relative;
+    float: left;
+    padding: 5px 10px;
+    line-height: 1.45;
+    list-style-type:none;
+    text-decoration: none;
+    color: #03a9f4;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    margin-left: -1px;
+}
+
+/*删除按钮*/
+a.delete{
+    cursor: pointer;
+}
+
+.hidden{
+    display: none;
+}

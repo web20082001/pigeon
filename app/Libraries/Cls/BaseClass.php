@@ -92,9 +92,10 @@ abstract class BaseClass
      * 获取单个
      * @param $id
      * @param null $with
+     * @param null $fail
      * @return mixed
      */
-    function getById($id,$with=null){
+    function getById($id,$with=null,$fail=true){
 
         $query = $this->model->where('id',$id);
 
@@ -102,7 +103,12 @@ abstract class BaseClass
             $query->with($with);
         }
 
-        return $query->firstOrFail();
+        if($fail){
+            $model = $query->firstOrFail();
+        }else{
+            $model = $query->first();
+        }
+        return $model;
     }
 
     /**

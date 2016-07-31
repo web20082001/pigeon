@@ -51,11 +51,35 @@ class AreaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        $input = $request->only(
+            'parent_id'
+        );
+
+        //上级地区
+        $parent_id = intval($input['parent_id']);
+
+        if($parent_id){
+            //上级地区
+            $area = $this->clsArea->getById($parent_id,$with=null,$fail=false);
+            $parent_name = $area->name;
+        }else{
+            $parent_id = 0;
+            $parent_name = '无';
+        }
+
+        //排序最大值
+        $order_sort_max = $this->clsArea->order_sort_max();
+        //加1
+        $order_sort_max += 1;
+
         $sub_title = '地区列表';
 
         return view(self::CONTROLLER_NAME.'/create',compact(
+            'parent_id',
+            'parent_name',
+            'order_sort_max',
             'sub_title'
         ));
     }
@@ -73,8 +97,23 @@ class AreaController extends Controller
             'parent_id',
             'name',
             'code',
+            'order_sort',
             'disabled_at'
         );
+
+        //上级地区
+        $parent_id = intval($input['parent_id']);
+
+        $level = 0;
+
+        if($parent_id){
+            //上级地区
+            $area = $this->clsArea->getById($parent_id,$with=null,$fail=true);
+            $level = intval($area->level) + 1;
+        }
+
+        //级别
+        $input['level'] = $level;
 
         //添加
         $add_rlt = $this->clsArea->add($input);
@@ -98,12 +137,25 @@ class AreaController extends Controller
     {
         $area = $this->clsArea->getById($id);
 
+        $parent_id = $area->parent_id;
+
+        if($parent_id){
+            //上级地区
+            $area_parent = $this->clsArea->getById($parent_id,$with=null,$fail=false);
+            $parent_name = $area_parent->name;
+        }else{
+            $parent_id = 0;
+            $parent_name = '无';
+        }
+
         $sub_title = '地区列表';
 
         return view(self::CONTROLLER_NAME.'/edit',compact(
             'sub_title',
             'id',
-            'area'
+            'area',
+            'parent_id',
+            'parent_name'
         ));
     }
 
@@ -117,9 +169,9 @@ class AreaController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->only(
-            'parent_id',
             'name',
             'code',
+            'order_sort',
             'disabled_at'
         );
 

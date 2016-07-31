@@ -17,11 +17,13 @@ class TaskController extends Controller
 
     private $clsTask;
     private $clsTaskIndex;
+    private $clsTaskLogIndex;
 
     function __construct()
     {
         $this->clsTask = new App\Libraries\Cls\Task();
         $this->clsTaskIndex = new App\Libraries\Cls\TaskIndex();
+        $this->clsTaskLogIndex = new App\Libraries\Cls\TaskLogIndex();
     }
 
     /**
@@ -32,8 +34,6 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $this->clsTaskIndex->search($request);
-
-        var_dump(Auth::check());
 
         //获取数据
         $tasks = $this->clsTaskIndex->getTasks();
@@ -79,7 +79,6 @@ class TaskController extends Controller
             'url',
             'keyword',
             'per_pv',
-            'per_pv_spread',
             'start_time',
             'end_time'
         );
@@ -125,10 +124,10 @@ class TaskController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->only(
-            'parent_id',
             'name',
-            'code',
-            'disabled_at'
+            'state',
+            'start_time',
+            'end_time'
         );
 
         $input['id'] = $id;
@@ -182,5 +181,34 @@ class TaskController extends Controller
         }
 
         return $rsp;
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request, $id)
+    {
+        //任务详情
+        $task = $this->clsTask->getById($id,['user']);
+
+        $this->clsTaskLogIndex->search($request);
+
+        //获取数据
+        $task_logs = $this->clsTaskLogIndex->getTaskLogs();
+
+        $clsTaskLogIndex = $this->clsTaskLogIndex;
+
+        $sub_title = '任务详情';
+
+        return view(self::CONTROLLER_NAME.'/show',compact(
+            'sub_title',
+            'id',
+            'task',
+            'task_logs',
+            'clsTaskLogIndex'
+        ));
     }
 }

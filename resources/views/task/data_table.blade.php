@@ -5,7 +5,7 @@
             <a href="{!! $clsTaskIndex->getBaseLink('name') !!}">任务名称</a>
         </th>
         <th>
-            <a href="{!! $clsTaskIndex->getBaseLink('code') !!}">关键词</a>
+            <a href="{!! $clsTaskIndex->getBaseLink('keyword') !!}">关键词</a>
         </th>
         <th>
             <a href="{!! $clsTaskIndex->getBaseLink('url') !!}">链接</a>
@@ -52,6 +52,7 @@
         <td>{{$a->created_at}}</td>
         <td>
             <a href="/task/{{$a->id}}/edit">编辑</a>
+            <a href="/task/{{$a->id}}">详情</a>
         </td>
     </tr>
     @endforeach

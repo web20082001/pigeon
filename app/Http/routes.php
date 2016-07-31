@@ -27,35 +27,37 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/task/action', 'TaskController@postAction');
     Route::post('/task/{id}', 'TaskController@update');
 
-//地区
+    //地区
     Route::resource('/area', 'AreaController');
     Route::post('/area/action', 'AreaController@postAction');
     Route::post('/area/{id}', 'AreaController@update');
 
-//主机
+    //主机
     Route::resource('/host', 'HostController');
     Route::post('/host/action', 'HostController@postAction');
     Route::post('/host/{id}', 'HostController@update');
 
-//代理
+    //代理
     Route::resource('/host_proxy', 'HostProxyController');
     Route::post('/host_proxy/action', 'HostProxyController@postAction');
     Route::post('/host_proxy/{id}', 'HostProxyController@update');
 
-//权限
+    //权限
     Route::resource('/role', 'RoleController');
     Route::post('/role/action', 'RoleController@postAction');
     Route::post('/role/{id}', 'RoleController@update');
 
-//管理员
+    //管理员
+    Route::get('/user/{id}/password', 'UserController@password');
     Route::resource('/user', 'UserController');
     Route::post('/user/action', 'UserController@postAction');
     Route::post('/user/{id}', 'UserController@update');
 
-//接口
+
+    //接口
     Route::get('/api/action', 'ApiController@postAction');
     Route::resource('/api', 'ApiController');
     Route::post('/api/{id}', 'ApiController@update');
 
-    
+
 });

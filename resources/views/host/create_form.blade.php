@@ -13,6 +13,10 @@
         <input type="text" name="memory">
     </div>
 
+    <div class="field">
+        <label>主机编号</label>
+        <input type="text" name="code">
+    </div>
 
     <h4 class="ui header">地区</h4>
     <select name="area_id" class="ui fluid normal dropdown">
