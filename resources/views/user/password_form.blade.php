@@ -25,6 +25,6 @@
 <input type="hidden" name="user_id" value="{{$id}}">
 <input type="hidden" name="action" value="password_edit">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-{!! Form::submit('保存',['class'=>'ui button']) !!}
+{!! Form::submit('保存',['class'=>'ui primary button']) !!}
 
 {!! Form::close() !!}

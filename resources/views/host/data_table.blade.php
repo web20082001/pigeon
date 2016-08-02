@@ -1,4 +1,4 @@
-<table class="ui celled table">
+<table class="ui celled center aligned table">
     <thead>
     <tr>
         <th>
@@ -30,7 +30,7 @@
         <td>{{$a->area_name}}</td>
         <td>{{$a->code}}</td>
         <td>{{$a->remote_addr}}</td>
-        <td>{{$a->disabled_at_text()}}</td>
+        <td>{!! $a->disabled_at_text() !!}</td>
         <td>{{$a->created_at}}</td>
         <td>{{$a->updated_at}}</td>
         <td>
@@ -41,6 +41,7 @@
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <a class="delete">删除</a>
                 <button type="submit" class="hidden">删除</button>
+                /
                 <a href="/host/{{$a->id}}/edit">编辑</a>
             </form>
             {!! Form::close() !!}

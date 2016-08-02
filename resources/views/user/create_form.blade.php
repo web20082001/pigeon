@@ -2,7 +2,7 @@
 
     <div class="field">
         <label>用户名</label>
-        <input type="text" name="name">
+        <input type="text" name="name" value="{{old('name')}}">
     </div>
     <div class="field">
         <label>密码</label>
@@ -11,22 +11,23 @@
 
     <div class="field">
         <label>真实姓名</label>
-        <input type="text" name="realname">
+        <input type="text" name="realname" value="{{old('realname')}}">
     </div>
 
     <div class="field">
         <label>邮箱</label>
-        <input type="text" name="email">
+        <input type="text" name="email" value="{{old('email')}}">
     </div>
 
+    <div class="field">
     <h4 class="ui header">权限</h4>
     <select name="role_id" class="ui fluid normal dropdown">
-        <option value="-1">不限</option>
+        <option value="">请选择</option>
         @foreach ($roles as $r)
             <option value="{{$r->id}}">{{$r->name}}</option>
         @endforeach
     </select>
-
+    </div>
 
     <div class="inline fields">
         <label for="fruit">状态</label>
@@ -45,6 +46,6 @@
     </div>
 
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-    {!! Form::submit('添加',['class'=>'ui button']) !!}
+    {!! Form::submit('添加',['class'=>'ui primary button']) !!}
 
 {!! Form::close() !!}

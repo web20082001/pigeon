@@ -14,7 +14,7 @@ use DB;
 class UserIndex extends BaseClass
 {
 
-    protected $disabled_at = -1;
+    protected $disabled_at = 0;
 
 
     protected $search = null;

@@ -27,6 +27,6 @@
 </div>
 
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-{!! Form::submit('保存',['class'=>'ui button']) !!}
+{!! Form::submit('保存',['class'=>'ui primary button']) !!}
 
 {!! Form::close() !!}

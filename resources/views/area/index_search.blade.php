@@ -1,4 +1,4 @@
-{!! Form::open(array('action' => array('AreaController@index'), 'method'=>'get')) !!}
+{!! Form::open(array('action' => array('AreaController@index'), 'method'=>'get','class'=>'ui form')) !!}
 
     <h4 class="ui header">状态</h4>
     {!! Form::select(

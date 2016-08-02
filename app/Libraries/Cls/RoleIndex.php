@@ -14,11 +14,11 @@ use DB;
 class RoleIndex extends BaseClass
 {
 
-    protected $disabled_at = -1;
+    protected $disabled_at = 0;
     protected $search = null;
     protected $keywords = null;
     protected $order_by = 'id';
-    protected $dir = 'desc';
+    protected $dir = 'asc';
     protected $page_size;
     //类
     protected $mRole;

@@ -7,3 +7,4 @@
 {{--</div>--}}
 
 <h2 class="ui dividing header">{{$sub_title or ''}}</h2>
+<br />

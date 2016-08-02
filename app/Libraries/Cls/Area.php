@@ -38,4 +38,9 @@ class Area extends BaseClass
 
         return $max;
     }
+
+    function all_level()
+    {
+        //$this->all()
+    }
 }

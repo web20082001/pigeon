@@ -1,23 +1,29 @@
 {!! Form::open(array('action' => array('UserController@update',$id),'class'=>'ui form')) !!}
 
 <div class="field">
+    <label>用户名</label>
+    {{$user->name}}
+</div>
+
+<div class="field">
     <label>真实姓名</label>
     <input type="text" name="realname" value="{{$user->realname}}">
 </div>
 
 <div class="field">
     <label>邮箱</label>
-    <input type="text" name="email" value="{{$user->email}}">
+    {{$user->email}}
 </div>
 
+<div class="field">
 <h4 class="ui header">权限</h4>
 <select name="role_id" class="ui fluid normal dropdown">
-    <option value="-1">不限</option>
+    <option value="">请选择</option>
     @foreach ($roles as $r)
         <option value="{{$r->id}}" @if($r->id == $user->role_id) selected @endif>{{$r->name}}</option>
     @endforeach
 </select>
-
+</div>
 
 <div class="inline fields">
     <label for="fruit">状态</label>
@@ -36,6 +42,6 @@
 </div>
 
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-{!! Form::submit('保存',['class'=>'ui button']) !!}
+{!! Form::submit('保存',['class'=>'ui primary button']) !!}
 
 {!! Form::close() !!}

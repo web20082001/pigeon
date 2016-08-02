@@ -1,4 +1,4 @@
-<table class="ui celled table">
+<table class="ui celled center aligned table">
     <thead>
     <tr>
         <th>
@@ -34,7 +34,7 @@
         <td>{{$a->name}}</td>
         <td>{{$a->code}}</td>
         <td>{{$a->order_sort}}</td>
-        <td>{{$a->disabled_at_text()}}</td>
+        <td>{!! $a->disabled_at_text()!!}</td>
         <td>{{$a->created_at}}</td>
         <td>{{$a->updated_at}}</td>
         <td>
@@ -43,9 +43,12 @@
             {!! Form::open(array('action' => array('AreaController@destroy', $a->id), 'method'=>'post')) !!}
                 <input name="_method" type="hidden" value="delete">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <a class="delete">删除</a>
                 <button type="submit" class="hidden">删除</button>
+
+                <a class="delete">删除</a>
+                /
                 <a href="/area/{{$a->id}}/edit">编辑</a>
+                /
                 <a href="/area/create?parent_id={{$a->id}}">添加</a>
             </form>
             {!! Form::close() !!}

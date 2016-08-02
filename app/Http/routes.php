@@ -12,7 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/task');
+
 });
 
 // 登录
@@ -53,11 +54,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/user/action', 'UserController@postAction');
     Route::post('/user/{id}', 'UserController@update');
 
-
-    //接口
-    Route::get('/api/action', 'ApiController@postAction');
-    Route::resource('/api', 'ApiController');
-    Route::post('/api/{id}', 'ApiController@update');
-
-
 });
+
+//接口
+Route::get('/api/action', 'ApiController@postAction');
+Route::resource('/api', 'ApiController');
+Route::post('/api/{id}', 'ApiController@update');
+

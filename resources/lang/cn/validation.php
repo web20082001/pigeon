@@ -58,10 +58,10 @@ return [
         'array'   => 'The :attribute must have at least :min items.',
     ],
     'not_in'               => 'The selected :attribute is invalid.',
-    'numeric'              => 'The :attribute must be a number.',
-    'present'              => 'The :attribute field must be present.',
+    'numeric'              => ':attribute 项必须为数字',
+    'present'              => ':attribute field must be present.',
     'regex'                => 'The :attribute format is invalid.',
-    'required'             => 'The :attribute field is required.',
+    'required'             => ':attribute 项为必填',
     'required_if'          => 'The :attribute field is required when :other is :value.',
     'required_unless'      => 'The :attribute field is required unless :other is in :values.',
     'required_with'        => 'The :attribute field is required when :values is present.',
@@ -78,7 +78,7 @@ return [
     'string'               => 'The :attribute must be a string.',
     'timezone'             => 'The :attribute must be a valid zone.',
     'unique'               => 'The :attribute has already been taken.',
-    'url'                  => 'The :attribute format is invalid.',
+    'url'                  => ':attribute 项，链接格式不正确，例:http://www.abc.com',
 
     /*
     |--------------------------------------------------------------------------

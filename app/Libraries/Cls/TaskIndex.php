@@ -14,9 +14,12 @@ use DB;
 
 class TaskIndex extends BaseClass
 {
+    protected $start_time;
+    protected $end_time;
+
     protected $state = -1;
     protected $enter_type = -1;
-    protected $search = null;
+    protected $search = 'name';
     protected $keywords = null;
     protected $order_by = 'id';
     protected $dir = 'desc';
@@ -51,6 +54,9 @@ class TaskIndex extends BaseClass
         //默认分页
         $this->page_size = 20;
         $this->mTask = new App\Task();
+
+        $this->start_time = full_date_start();
+        $this->end_time = full_date_end();
     }
 
 
@@ -114,20 +120,22 @@ class TaskIndex extends BaseClass
     function search_where($query)
     {
         //表别名
-        $a = App\Task::TABLE;
+        $t = App\Task::TABLE;
 
         if ($this->state == -1) {
             //不限
         }else{
             //禁用
-            $query = $query->where($a . '.state',$this->state);
+            $query = $query->where($t . '.state',$this->state);
         }
 
         if ($this->enter_type == -1) {
             //不限
         }else{
-            $query = $query->where($a . '.enter_type',$this->enter_type);
+            $query = $query->where($t . '.enter_type',$this->enter_type);
         }
+
+        $query = $query->whereBetween($t.'.start_time',[$this->start_time, $this->end_time]);
 
         //查询条件
         if($this->search != '' && $this->keywords != ''){
@@ -136,7 +144,7 @@ class TaskIndex extends BaseClass
                 case 'name':
                 case 'keyword':
                 case 'url':
-                    $query = $query->where($a.'.'.$this->search, 'like','%'.$this->keywords.'%');
+                    $query = $query->where($t.'.'.$this->search, 'like','%'.$this->keywords.'%');
                     break;
                 default:
                     break;
@@ -257,5 +265,21 @@ class TaskIndex extends BaseClass
     public function getEnterType()
     {
         return $this->enter_type;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getStartTime()
+    {
+        return $this->start_time;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getEndTime()
+    {
+        return $this->end_time;
     }
 }

@@ -30,11 +30,12 @@ class User extends BaseClass
      * @param null $old_password
      * @return bool
      */
-    function password_change($user_id,$new_password,$old_password=null){
+    function password_change($new_password,$old_password=null){
 
         //用户
-        $user = $this->getById($user_id);
+        $user = $this->user();
 
+    /*
         if(!is_null($old_password)){
             //验证原密码是否正确
             $is_pass = $this->password_check($user_id, $old_password);
@@ -44,10 +45,14 @@ class User extends BaseClass
                 return false;
             }
         }
+    */
 
         //密码正确
-        $user->password = $this->password_bcrypt($new_password);
-        return $user->save();
+        # $user->password = $this->password_bcrypt($new_password);
+
+        return $user->update([
+            'password' => $this->password_bcrypt($new_password)
+        ]);
     }
 
     /**

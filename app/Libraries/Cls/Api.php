@@ -23,10 +23,10 @@ class Api extends BaseClass
     }
 
     /**
-     * 获取主机id
-     * @param $code
-     * @return bool
-     */
+ * 获取主机id
+ * @param $code
+ * @return bool
+ */
     function getHostId($code){
         $host = $this->clsHost->getByCode($code);
         if(!$host){
@@ -36,6 +36,22 @@ class Api extends BaseClass
         }
         return $host->id;
     }
+
+    /**
+     * 获取主机id
+     * @param $code
+     * @return bool
+     */
+    function getHost($code){
+        $host = $this->clsHost->getByCode($code);
+        if(!$host){
+            //错误原因
+            $this->error_msg = '主机编号不存在';
+            return false;
+        }
+        return $host;
+    }
+
     /**
      * 主机领单
      * @param $host_id
@@ -93,13 +109,26 @@ class Api extends BaseClass
      */
     function host_proxy_update($code, $addr){
 
-        $host_id = $this->getHostId($code);
+        $host = $this->getHost($code);
 
-        if($host_id) {
-            return $this->clsHostProxy->updateByHostId(
-                $host_id,
-                ['addr' => $addr]
-            );
+        if($host) {
+
+            $host_id = $host->id;
+            //代理
+            $host_proxy = $this->clsHostProxy->getByHostId($host_id);
+
+            if($host_proxy){
+                $host_proxy->addr = $addr;
+                return $host_proxy->save();
+            }else{
+                return $this->clsHostProxy->add([
+                    'host_id' => $host_id,
+                    'addr' => $addr,
+                    'area_id' =>$host->area_id
+                ]);
+            }
+
+
         }else{
             return false;
         }

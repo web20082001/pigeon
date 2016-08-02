@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -9,6 +9,25 @@ class User extends Authenticatable
     const TABLE = 'users';
     public $table = self::TABLE;
     public $timestamps = true;
+
+    public static function storeValidator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required',
+            'realname' => 'required',
+            'password' => 'required',
+            'email' => 'required|email',
+            'role_id'=> 'required|numeric'
+        ]);
+    }
+
+    public static function updateValidator(array $data)
+    {
+        return Validator::make($data, [
+            'realname' => 'required',
+            'role_id'=> 'required|numeric'
+        ]);
+    }
 
     /**
      * The attributes that are mass assignable.

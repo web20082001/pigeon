@@ -7,11 +7,11 @@
     </div>
     <div class="field">
         <label>地区名称</label>
-        <input type="text" name="name">
+        <input type="text" name="name" value="{{old('name')}}">
     </div>
     <div class="field">
         <label>地区编号</label>
-        <input type="text" name="code">
+        <input type="text" name="code" value="{{old('code')}}">
     </div>
     <div class="field">
         <label>排序</label>
@@ -36,6 +36,6 @@
     </div>
 
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-    {!! Form::submit('添加',['class'=>'ui button']) !!}
+    {!! Form::submit('添加',['class'=>'ui primary button']) !!}
 
 {!! Form::close() !!}

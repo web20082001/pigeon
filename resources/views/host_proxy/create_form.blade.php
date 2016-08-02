@@ -73,6 +73,6 @@
     </div>
 
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-    {!! Form::submit('添加',['class'=>'ui button']) !!}
+    {!! Form::submit('添加',['class'=>'ui primary button']) !!}
 
 {!! Form::close() !!}

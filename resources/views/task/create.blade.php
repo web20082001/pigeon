@@ -16,6 +16,6 @@
     {{-- 编辑项 --}}
     @include('task.create_form')
 
+    <script type="text/javascript" src="{{ asset('js/WdatePicker.js') }}"></script>
 
-    <script src="{{ URL::asset('js/task/create.js',getenv('HTTP_SECURE'))}}"></script>
 @endsection

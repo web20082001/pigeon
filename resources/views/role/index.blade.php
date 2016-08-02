@@ -7,9 +7,7 @@
     @section('body_breadcrumb')
 
         {{-- 面包屑导航--}}
-        {{--@include('common.breadcrumb')--}}
-
-        <h2 class="ui dividing header">{{$sub_title or ''}}</h2>
+        @include('common.breadcrumb')
 
     @endsection
 

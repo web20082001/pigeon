@@ -1,4 +1,4 @@
-<table class="ui celled table">
+<table class="ui celled center aligned table">
     <thead>
     <tr>
         <th>
@@ -26,15 +26,16 @@
     <tr>
         <td>{{$a->name}}</td>
         <td>{{$a->memo}}</td>
-        <td>{{$a->disabled_at_text()}}</td>
+        <td>{!! $a->disabled_at_text() !!}</td>
         <td>{{$a->created_at}}</td>
         <td>{{$a->updated_at}}</td>
         <td>
             {!! Form::open(array('action' => array('RoleController@destroy', $a->id), 'method'=>'post')) !!}
                 <input name="_method" type="hidden" value="delete">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <a class="delete">删除</a>
                 <button type="submit" class="hidden">删除</button>
+                <a class="delete">删除</a>
+                /
                 <a href="/role/{{$a->id}}/edit">编辑</a>
             </form>
             {!! Form::close() !!}

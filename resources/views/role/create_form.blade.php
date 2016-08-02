@@ -2,12 +2,12 @@
 
     <div class="field">
         <label>名称</label>
-        <input type="text" name="name">
+        <input type="text" name="name" value="{{old('name')}}">
     </div>
 
     <div class="field">
         <label>权限描述</label>
-        <input type="text" name="memo" value="">
+        <input type="text" name="memo" value="{{old('memo')}}">
     </div>
 
     <div class="inline fields">
@@ -27,6 +27,6 @@
     </div>
 
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-    {!! Form::submit('添加',['class'=>'ui button']) !!}
+    {!! Form::submit('添加',['class'=>'ui primary button']) !!}
 
 {!! Form::close() !!}

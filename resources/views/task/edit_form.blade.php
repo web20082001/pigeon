@@ -31,7 +31,7 @@
         'enter_type',
         Lang::get('models.task.enter_type'),
         $task->enter_type,
-        array('class'=>'ui fluid normal dropdown'))
+        array('class'=>'ui fluid normal dropdown','disabled'=>'disabled'))
     !!}
 </div>
 
@@ -42,15 +42,17 @@
 
 <div class="field">
     <label>开始日期</label>
-    <input type="text" name="start_time" value="{{$task->start_time}}">
+    <input type="text" class="Wdate" id="begin" name="start_time" onclick="javascript:WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'end\');}',minDate:'#F{$dp.$D(\'end\',{d:-7});}'})" disabled readonly="readonly" value="{{$task->start_time}}">
 </div>
 
 <div class="field">
     <label>结束日期</label>
-    <input type="text" name="end_time" value="{{$task->end_time}}">
+    <input type="text" class="Wdate" id="end" name="end_time" onclick="javascript:WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'begin\');}',maxDate:'#F{$dp.$D(\'begin\',{d:7});}'})" disabled readonly="readonly" value="{{$task->end_time}}">
 </div>
 
+
+
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-{!! Form::submit('添加',['class'=>'ui button']) !!}
+{!! Form::submit('保存',['class'=>'ui primary button']) !!}
 
 {!! Form::close() !!}

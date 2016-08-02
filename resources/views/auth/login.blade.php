@@ -1,4 +1,5 @@
 <!-- resources/views/auth/login.blade.php -->
+<script type="text/javascript" src="{{ asset('js/jquery-3.1.0.js',getenv('HTTP_SECURE')) }}"></script>
 
 @if (count($errors))
     <ul>
@@ -7,6 +8,8 @@
         @endforeach
     </ul>
 @endif
+
+<div style="text-align: center;">
 
 <form method="POST" action="/auth/login">
     {!! csrf_field() !!}
@@ -22,10 +25,17 @@
     </div>
 
     <div>
-        <input type="checkbox" name="remember"> Remember Me
+        {{--<input type="checkbox" name="remember">--}}
     </div>
 
     <div>
-        <button type="submit">Login</button>
+        <button type="submit">登录</button>
     </div>
 </form>
+
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('input[name="email"]').focus();
+    });
+</script> 

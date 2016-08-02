@@ -15,6 +15,5 @@
     {{-- 编辑项 --}}
     @include('host.create_form')
 
-
-    <script src="{{ URL::asset('js/host/create.js',getenv('HTTP_SECURE'))}}"></script>
+    <script type="text/javascript" src="{{ asset('js/WdatePicker.js') }}"></script>
 @endsection

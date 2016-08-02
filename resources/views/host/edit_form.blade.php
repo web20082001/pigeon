@@ -18,6 +18,7 @@
     <input type="text" name="code" value="{{$host->code}}">
 </div>
 
+<div class="field">
 <h4 class="ui header">地区</h4>
 <select name="area_id" class="ui fluid normal dropdown">
     <option value="-1">请选择</option>
@@ -25,6 +26,7 @@
         <option value="{{$a->id}}"@if($a->id == $host->area_id) selected @endif>{{$a->name}}</option>
     @endforeach
 </select>
+</div>
 
 
 <div class="field">
@@ -56,7 +58,7 @@
 </div>
 <div class="field">
     <label>过期时间</label>
-    <input type="text" name="expire_time" value="{{$host->expire_time}}">
+    <input type="text" class="Wdate" id="begin" name="expire_time" onclick="javascript:WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" value="{{$host->expire_time_short()}}">
 </div>
 
 
@@ -77,6 +79,6 @@
 </div>
 
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-{!! Form::submit('添加',['class'=>'ui button']) !!}
+{!! Form::submit('保存',['class'=>'ui primary button']) !!}
 
 {!! Form::close() !!}

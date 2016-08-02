@@ -16,6 +16,6 @@
     {{-- 编辑项 --}}
     @include('task.edit_form')
 
-    <script src="{{ URL::asset('js/task/edit.js',getenv('HTTP_SECURE'))}}"></script>
+    <script type="text/javascript" src="{{ asset('js/WdatePicker.js') }}"></script>
 
 @endsection

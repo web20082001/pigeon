@@ -19,6 +19,7 @@ class HostProxy extends BaseClass
     }
 
     function add($input){
+
         $this->mHostProxy = model_update($this->mHostProxy,$input);
         return $this->mHostProxy->save($input);
     }

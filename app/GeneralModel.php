@@ -31,14 +31,11 @@ class GeneralModel extends Model
     }
 
 
-    public function disabledAtText($value){
+    public function disabledAtText($value,$color=true){
 
-        if(is_null($value)){
-            $val = '启用';
-        }else{
-            $val = '禁用';
-        }
+        $val = is_null($value) ? '启用':'禁用';
+        $class = $color ? (is_null($value) ? 'green':'red'):'';
 
-        return $val;
+        return sprintf("<span class=\"{$class}\">{$val}</span>");
     }
 }

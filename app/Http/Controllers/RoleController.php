@@ -75,6 +75,13 @@ class RoleController extends Controller
             'disabled_at'
         );
 
+        //验证
+        $validator = App\Role::storeValidator($input);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+
         //添加
         $add_rlt = $this->clsRole->add($input);
 
@@ -120,6 +127,13 @@ class RoleController extends Controller
             'memo',
             'disabled_at'
         );
+
+        //验证
+        $validator = App\Role::updateValidator($input);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
 
         $input['id'] = $id;
 

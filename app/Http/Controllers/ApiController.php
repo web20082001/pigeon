@@ -95,6 +95,14 @@ class ApiController extends Controller
                 break;
 
             case 'host_proxy':
+
+                //验证
+                $validator = App\HostProxy::storeValidator($input);
+
+                if ($validator->fails()) {
+                    return redirect()->back()->withInput()->withErrors($validator);
+                }
+
                 //获取主机的代理ip
                 $host_proxy = $this->clsApi->host_proxy($input['code']);
                 if($host_proxy){
@@ -106,6 +114,13 @@ class ApiController extends Controller
                 break;
 
             case 'host_proxy_update':
+
+                //验证
+                $validator = App\HostProxy::updateValidator($input);
+
+                if ($validator->fails()) {
+                    return  $this->json_error('IP格式不正确');
+                }
 
                 //获取主机的代理ip
                 $is_success = $this->clsApi->host_proxy_update($input['code'], $input['addr']);

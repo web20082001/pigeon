@@ -50,13 +50,13 @@
             {{--<div class="ui action left icon input">--}}
                 {{--<i class="search icon"></i>--}}
                 {{--<input type="text" placeholder="Search">--}}
-                {{--<button class="ui button">Submit</button>--}}
+                {{--<button class="ui primary button">Submit</button>--}}
             {{--</div>--}}
         {{--</div>--}}
 
 
 
-        <a class="item active">{{Auth::user()->name }}</a>
+        <a class="item active" href="/user/{{Auth::user()->id }}/password" target="_blank">{{Auth::user()->name }}</a>
 
         <a class="item active" href="/auth/logout">退出</a>
     </div>

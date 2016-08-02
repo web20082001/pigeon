@@ -58,11 +58,14 @@ class HostController extends Controller
         // 地区
         $areas = $this->clsArea->all();
 
+        $expire_time = short_date();
+
         $sub_title = '主机列表';
 
         return view(self::CONTROLLER_NAME.'/create',compact(
             'sub_title',
-            'areas'
+            'areas',
+            'expire_time'
         ));
     }
 
@@ -90,6 +93,13 @@ class HostController extends Controller
             'quarter_fee',
             'expire_time'
         );
+
+        //验证
+        $validator = App\Host::updateValidator($input);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
 
         //添加
         $add_rlt = $this->clsHost->add($input);
@@ -149,6 +159,13 @@ class HostController extends Controller
             'quarter_fee',
             'expire_time'
         );
+
+        //验证
+        $validator = App\Host::updateValidator($input);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
 
         $input['id'] = $id;
 

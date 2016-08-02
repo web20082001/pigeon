@@ -3,12 +3,26 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Validator;
 
 class Role extends GeneralModel
 {
     const TABLE = 'role';
     public $table = self::TABLE;
     public $timestamps = true;
+
+    public static function storeValidator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required',
+            'memo' => 'required'
+        ]);
+    }
+
+    public static function updateValidator(array $data)
+    {
+        return self::storeValidator($data);
+    }
 
     /**
      * Set the user's first name.

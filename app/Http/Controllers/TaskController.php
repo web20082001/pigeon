@@ -39,13 +39,16 @@ class TaskController extends Controller
         $tasks = $this->clsTaskIndex->getTasks();
 
         $clsTaskIndex = $this->clsTaskIndex;
-
+        $start_time = short_date();
+        $end_time = $start_time;
         $sub_title = '任务列表';
 
         return view(self::CONTROLLER_NAME.'/index',compact(
             'sub_title',
             'tasks',
-            'clsTaskIndex'
+            'clsTaskIndex',
+            'start_time',
+            'end_time'
         ));
     }
 
@@ -58,8 +61,13 @@ class TaskController extends Controller
     {
         $sub_title = '任务列表';
 
+        $start_time = full_date_start();
+        $end_time = full_date_end();
+
         return view(self::CONTROLLER_NAME.'/create',compact(
-            'sub_title'
+            'sub_title',
+            'start_time',
+            'end_time'
         ));
     }
 
@@ -72,6 +80,7 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+
         $input = $request->only(
             'name',
             'state',
@@ -82,6 +91,13 @@ class TaskController extends Controller
             'start_time',
             'end_time'
         );
+
+        //添加验证
+        $validator = App\Task::storeValidator($input);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
 
         //添加
         $add_rlt = $this->clsTask->add($input);
@@ -125,10 +141,15 @@ class TaskController extends Controller
     {
         $input = $request->only(
             'name',
-            'state',
-            'start_time',
-            'end_time'
+            'state'
         );
+
+        //验证
+        $validator = App\Task::updateValidator($input);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
 
         $input['id'] = $id;
 

@@ -1,4 +1,4 @@
-<table class="ui celled table">
+<table class="ui celled center aligned table">
     <thead>
     <tr>
         <th>任务编号</th>

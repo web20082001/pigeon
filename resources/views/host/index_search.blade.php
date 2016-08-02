@@ -1,10 +1,10 @@
-{!! Form::open(array('action' => array('HostController@index'), 'method'=>'get')) !!}
+{!! Form::open(array('action' => array('HostController@index'), 'method'=>'get','class'=>'ui form')) !!}
 
     <h4 class="ui header">状态</h4>
     {!! Form::select(
       'disabled_at',
       array('-1'=>'不限') + Lang::get('common.disabled_at'),
-      $clsHostIndex->getState(),
+      $clsHostIndex->getDisabledAt(),
       array('class'=>'ui fluid normal dropdown'))
     !!}
 

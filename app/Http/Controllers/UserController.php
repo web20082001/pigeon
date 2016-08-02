@@ -84,6 +84,13 @@ class UserController extends Controller
             'role_id'
         );
 
+        //验证
+        $validator = App\User::storeValidator($input);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+
         //添加
         $add_rlt = $this->clsUser->add($input);
 
@@ -154,10 +161,16 @@ class UserController extends Controller
     {
         $input = $request->only(
             'realname',
-            'email',
             'role_id',
             'disabled_at'
         );
+
+        //验证
+        $validator = App\User::updateValidator($input);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
 
         $input['id'] = $id;
 
@@ -190,8 +203,9 @@ class UserController extends Controller
             case 'password_edit':
 
                 $input['old_password'] = null;
+
                 //修改密码
-                $change_success = $this->clsUser->password_change($input['user_id'],$input['new_password'],$input['old_password']);
+                $change_success = $this->clsUser->password_change($input['new_password'],$input['old_password']);
 
                 if($change_success){
                     $rsp = $this->withSuccess(redirect()->back(), '密码修改成功');

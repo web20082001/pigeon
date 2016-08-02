@@ -13,10 +13,8 @@ use DB;
 
 class HostProxyIndex extends BaseClass
 {
-
-    protected $disabled_at = -1;
     protected $area_id = -1;
-    protected $search = null;
+    protected $search = 'addr';
     protected $keywords = null;
     protected $order_by = 'id';
     protected $dir = 'desc';
@@ -116,18 +114,6 @@ class HostProxyIndex extends BaseClass
         //表别名
         $hp = App\HostProxy::TABLE;
         $h = App\Host::TABLE;
-
-        //故障状态
-        if ($this->disabled_at == -1) {
-            //不限
-        }else if ($this->disabled_at == 0) {
-            //启用
-            $query = $query->whereNull($hp . '.disabled_at');
-        } else if ($this->disabled_at == 1){
-            //禁用
-            $query = $query->whereNotNull($hp . '.disabled_at');
-        }
-
 
         //地区
         if ($this->area_id == -1) {
@@ -241,14 +227,6 @@ class HostProxyIndex extends BaseClass
         $this->base_link = '/' . $action . '?' . http_build_query($params);
 
         return $this->base_link;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDisabledAt()
-    {
-        return $this->disabled_at;
     }
 
     /**

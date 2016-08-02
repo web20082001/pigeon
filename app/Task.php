@@ -18,19 +18,25 @@ class Task extends GeneralModel
     const START = 3;
     const FINISH = 4;
 
-    public static function validator(array $data)
+    public static function storeValidator(array $data)
     {
         return Validator::make($data, [
-            'user_id' => 'required|numeric',
             'name' => 'required',
             'state' => 'required|numeric',
             'enter_type' => 'required|numeric',
-            'url' => 'required',
+            'url' => 'required|url',
             'keyword' => 'required',
             'per_pv' => 'required|numeric',
-            'per_pv_spread' => 'required',
-            'start_time' => 'required',
-            'end_time' => 'required',
+            'start_time' => 'required|date',
+            'end_time' => 'required|date',
+        ]);
+    }
+
+    public static function updateValidator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required',
+            'state' => 'required|numeric'
         ]);
     }
 
@@ -54,5 +60,13 @@ class Task extends GeneralModel
     public function enter_type_text()
     {
         return Lang::get('models.task.enter_type.'.$this->enter_type);
+    }
+
+    public function start_time_short(){
+        return short_date($this->start_time);
+    }
+
+    public function end_time_short(){
+        return short_date($this->end_time);
     }
 }

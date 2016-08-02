@@ -94,15 +94,37 @@ function full_date($time = null){
     return date('Y-m-d H:i:s',$time);
 }
 
+function full_date_start($time = null){
+
+    if(is_null($time)){
+        $time = time();
+    }
+
+    return date('Y-m-d 00:00:00',$time);
+}
+
+function full_date_end($time = null){
+
+    if(is_null($time)){
+        $time = time();
+    }
+
+    return date('Y-m-d 23:59:59',$time);
+}
 
 function short_date($time = null){
 
     if(is_null($time)){
         $time = time();
+        return date('Y-m-d',$time);
+    }else{
+        if(is_numeric($time)){
+            return date('Y-m-d',$time);
+        }else{
+            return substr($time,0,10);
+        }
     }
-    return date('Y-m-d',$time);
 }
-
 
 /**
  * 今天
@@ -311,15 +333,12 @@ function disabled_at_convert($value){
     return $disabled_values[$value];
 }
 
-function disabled_at_text($value){
+function disabled_at_text($value,$color=true){
 
-    if(is_null($value)){
-        $val = '启用';
-    }else{
-        $val = '禁用';
-    }
+    $val = is_null($value) ? '启用':'禁用';
+    $class = $color ? (is_null($value) ? 'green':'red'):'';
 
-    return $val;
+    return sprintf("<span class=\"{$class}\">{$val}</span>");
 }
 
 /**
@@ -328,9 +347,13 @@ function disabled_at_text($value){
  * @param $d2
  * @return float
  */
-function day_span($d1,$d2){
+function day_span($d1,$d2,$abs=true){
 
-    $time_span = abs(strtotime($d2) - strtotime($d1));
+    $diff_seconds = strtotime($d2) - strtotime($d1);
+
+    if($abs){
+        $time_span = abs($diff_seconds);
+    }
 
     return floor($time_span / 86400);
 }

@@ -15,8 +15,8 @@ use DB;
 class HostIndex extends BaseClass
 {
 
-    protected $state = -1;
-    protected $search = null;
+    protected $disabled_at = 0;
+    protected $search = 'remote_addr';
     protected $keywords = null;
     protected $order_by = 'id';
     protected $dir = 'desc';
@@ -116,11 +116,15 @@ class HostIndex extends BaseClass
         //表别名
         $a = App\Host::TABLE;
 
-        if ($this->state == -1) {
+        //故障状态
+        if ($this->disabled_at == -1) {
             //不限
-        }else{
+        }else if ($this->disabled_at == 0) {
+            //启用
+            $query = $query->whereNull($a . '.disabled_at');
+        } else if ($this->disabled_at == 1){
             //禁用
-            $query = $query->where($a . '.state',$this->state);
+            $query = $query->whereNotNull($a . '.disabled_at');
         }
 
         //查询条件
@@ -239,8 +243,8 @@ class HostIndex extends BaseClass
     /**
      * @return int
      */
-    public function getState()
+    public function getDisabledAt()
     {
-        return $this->state;
+        return $this->disabled_at;
     }
 }

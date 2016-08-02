@@ -21,4 +21,11 @@ $(function () {
         }
     });
 
+    //搜索关键词
+    $keywords = $('input[name="keywords"]');
+
+    if($keywords.length > 0){
+        $keywords.focus();
+    }
+
 });

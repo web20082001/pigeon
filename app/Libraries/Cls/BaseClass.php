@@ -166,4 +166,12 @@ abstract class BaseClass
     {
         return $this->error_msg;
     }
+
+    function userId(){
+        return Auth::user()->id;
+    }
+
+    function user(){
+        return Auth::user();
+    }
 }

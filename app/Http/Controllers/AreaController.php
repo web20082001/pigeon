@@ -101,6 +101,13 @@ class AreaController extends Controller
             'disabled_at'
         );
 
+        //验证
+        $validator = App\Area::updateValidator($input);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+
         //上级地区
         $parent_id = intval($input['parent_id']);
 
@@ -174,6 +181,13 @@ class AreaController extends Controller
             'order_sort',
             'disabled_at'
         );
+
+        //验证
+        $validator = App\Area::updateValidator($input);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
 
         $input['id'] = $id;
 

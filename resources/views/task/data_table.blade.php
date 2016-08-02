@@ -1,4 +1,4 @@
-<table class="ui celled table">
+<table class="ui celled center aligned table">
     <thead>
     <tr>
         <th>
@@ -52,6 +52,7 @@
         <td>{{$a->created_at}}</td>
         <td>
             <a href="/task/{{$a->id}}/edit">编辑</a>
+             /
             <a href="/task/{{$a->id}}">详情</a>
         </td>
     </tr>
