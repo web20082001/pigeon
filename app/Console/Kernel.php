@@ -14,7 +14,9 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         // Commands\Inspire::class,
-        Commands\TaskLogsRecycle::class
+        Commands\TaskLogsRecycle::class,
+        Commands\TaskAutoFinish::class
+
     ];
 
     /**

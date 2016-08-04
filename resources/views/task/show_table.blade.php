@@ -2,7 +2,7 @@
     <thead>
     <tr>
         <th>
-            <a href="{!! $clsTaskLogIndex->getBaseLink('id') !!}">订单编号</a>
+            <a href="{!! $clsTaskLogIndex->getBaseLink('id') !!}">日志编号</a>
         </th>
         <th>
             <a href="{!! $clsTaskLogIndex->getBaseLink('expect_time') !!}">预计时间</a>

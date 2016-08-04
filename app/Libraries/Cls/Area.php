@@ -43,4 +43,16 @@ class Area extends BaseClass
     {
         //$this->all()
     }
+
+    /**
+     * 所有可用城市
+     */
+    function cities()
+    {
+        return $this->mArea
+            ->where('parent_id','>',0)
+            ->whereNull('disabled_at')
+            ->orderBy('id','asc')
+            ->get();
+    }
 }

@@ -13,13 +13,24 @@
 
 Route::get('/', function () {
     return redirect('/task');
-
 });
+
+//Route::resource('/', 'IndexController');
 
 // 登录
 Route::get('auth/login', 'Auth\AuthController@getLogin');
 Route::post('auth/login', 'Auth\AuthController@postLogin');
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
+
+
+// Password reset link request routes...
+Route::get('password/email', 'Auth\PasswordController@getEmail');
+Route::post('password/email', 'Auth\PasswordController@postEmail');
+
+
+// Password reset routes...
+Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
+Route::post('password/reset', 'Auth\PasswordController@postReset');
 
 Route::group(['middleware' => 'auth'], function () {
 
@@ -27,6 +38,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/task', 'TaskController');
     Route::post('/task/action', 'TaskController@postAction');
     Route::post('/task/{id}', 'TaskController@update');
+    Route::get('/task/{id}/copy', 'TaskController@copy');
+    Route::get('/task/{id}/collect', 'TaskController@collect');
 
     //地区
     Route::resource('/area', 'AreaController');
@@ -54,6 +67,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/user/action', 'UserController@postAction');
     Route::post('/user/{id}', 'UserController@update');
 
+    //软件
+    Route::resource('/software', 'SoftwareController');
+    Route::post('/software/action', 'SoftwareController@postAction');
+    Route::post('/software/{id}', 'SoftwareController@update');
+
 });
 
 //接口
@@ -61,3 +79,5 @@ Route::get('/api/action', 'ApiController@postAction');
 Route::resource('/api', 'ApiController');
 Route::post('/api/{id}', 'ApiController@update');
 
+
+Route::resource('/test', 'TestController');

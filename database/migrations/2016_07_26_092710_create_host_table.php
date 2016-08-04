@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateHostTable extends Migration
 {
-    const TABLE = 'host';
+    const TABLE = 'hosts';
     /**
      * Run the migrations.
      *
@@ -23,14 +23,15 @@ class CreateHostTable extends Migration
             $table->integer('area_id');
             $table->string('code',32)->unique();
             $table->string('remote_addr',30);
-            $table->timestamp('disabled_at')->nullable();
+            $table->dateTime('disabled_at')->nullable();
             $table->string('adsl_username',100);
             $table->string('adsl_password',100);
             $table->string('contact',50);
             $table->decimal('month_fee',10,2);
             $table->decimal('quarter_fee',10,2);
-            $table->timestamp('expire_time',100);
-            $table->timestamps();
+            $table->dateTime('expire_time');
+            $table->dateTime('created_at');
+            $table->dateTime('updated_at');
         });
     }
 

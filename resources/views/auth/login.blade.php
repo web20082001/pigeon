@@ -1,13 +1,7 @@
 <!-- resources/views/auth/login.blade.php -->
 <script type="text/javascript" src="{{ asset('js/jquery-3.1.0.js',getenv('HTTP_SECURE')) }}"></script>
 
-@if (count($errors))
-    <ul>
-        @foreach($errors->all() as $error)
-            <li style="color: red; font-size: 12px">{{ $error }}</li>
-        @endforeach
-    </ul>
-@endif
+
 
 <div style="text-align: center;">
 
@@ -25,7 +19,17 @@
     </div>
 
     <div>
-        {{--<input type="checkbox" name="remember">--}}
+
+        <label><input type="checkbox" name="remember">记住我</label>
+
+        @if (count($errors))
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li style="color: red; font-size: 12px;list-style: none;">{{ $error }}</li>
+                @endforeach
+            </ul>
+        @endif
+
     </div>
 
     <div>

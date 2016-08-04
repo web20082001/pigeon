@@ -1,5 +1,18 @@
 {!! Form::open(array('action' => array('HostController@index'), 'method'=>'get','class'=>'ui form')) !!}
 
+
+
+
+    <h4 class="ui header">城市</h4>
+    <select name="area_id" class="ui fluid normal dropdown">
+        <option value="-1">不限</option>
+        @foreach ($areas as $a)
+            <option value="{{$a->id}}" @if($a->id == $clsHostIndex->getAreaId()) selected @endif>{{$a->name}}</option>
+        @endforeach
+    </select>
+
+
+
     <h4 class="ui header">状态</h4>
     {!! Form::select(
       'disabled_at',

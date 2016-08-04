@@ -9,7 +9,7 @@ return [
     ],
 
     'area' => [
-        'name' => '名称',
+        'name' => '省/市',
         'code' => '编号'
     ],
 
@@ -25,11 +25,20 @@ return [
     ],
 
     'host' => [
+        'code' => '主机编号',
         'remote_addr' => '远程主机地址',
-        'contact' => '购买联系人'
+        'contact' => '购买联系人',
+
     ],
 
     'host_proxy' => [
         'addr' => 'IP地址'
-    ]
+    ],
+
+    'software' => [
+        'name' => '名称',
+        'code' => '代号',
+        'varsion' => '版本',
+        'url' => '下载地址'
+    ],
 ];

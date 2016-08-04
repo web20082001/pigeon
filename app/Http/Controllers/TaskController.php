@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App;
 use App\Libraries\Cls;
 use Auth;
-
+use Lang;
 
 class TaskController extends Controller
 {
@@ -19,11 +19,14 @@ class TaskController extends Controller
     private $clsTaskIndex;
     private $clsTaskLogIndex;
 
+    private $clsTaskCollectIndex;
+
     function __construct()
     {
         $this->clsTask = new App\Libraries\Cls\Task();
         $this->clsTaskIndex = new App\Libraries\Cls\TaskIndex();
         $this->clsTaskLogIndex = new App\Libraries\Cls\TaskLogIndex();
+        $this->clsTaskCollectIndex = new App\Libraries\Cls\TaskCollectIndex();
     }
 
     /**
@@ -59,10 +62,10 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $sub_title = '任务列表';
+        $sub_title = '任务创建';
 
-        $start_time = full_date_start();
-        $end_time = full_date_end();
+        $start_time = short_date();
+        $end_time = $start_time;
 
         return view(self::CONTROLLER_NAME.'/create',compact(
             'sub_title',
@@ -73,6 +76,23 @@ class TaskController extends Controller
 
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function copy($id)
+    {
+        $task = $this->clsTask->getById($id);
+
+        $sub_title = '任务复制';
+
+        return view(self::CONTROLLER_NAME.'/copy',compact(
+            'sub_title',
+            'task'
+        ));
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -80,7 +100,6 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-
         $input = $request->only(
             'name',
             'state',
@@ -121,12 +140,22 @@ class TaskController extends Controller
     {
         $task = $this->clsTask->getById($id);
 
-        $sub_title = '任务列表';
+        //可用的状态选项
+        $states = Lang::get('models.task.'.Lang::get('models.task.state_names')[$task->state]);
+
+        //是否可编辑，取消和完成不可编辑
+        $is_can_not_edit = $this->clsTask->is_can_not_edit($task);
+
+        $sub_title = '任务编辑';
 
         return view(self::CONTROLLER_NAME.'/edit',compact(
             'sub_title',
             'id',
-            'task'
+            'task',
+            'states',
+            'is_can_not_edit'
+
+
         ));
     }
 
@@ -158,7 +187,7 @@ class TaskController extends Controller
         if($up_rlt){
             $rsp = $this->withSuccess(redirect()->back(), '保存成功');
         }else{
-            $rsp = $this->withError(redirect()->back(), '保存失败');
+            $rsp = $this->withError(redirect()->back(), '保存失败:'.$this->clsTask->getErrorMsg());
         }
 
         return $rsp;
@@ -168,14 +197,32 @@ class TaskController extends Controller
     public function postAction(Request $request){
 
         //验证是否是本组的
-        $input = $request->only(['action']);
+        $input = $request->only([
+            'action',
+            'id',
+            'state'
+        ]);
+
 
         //动作
         $action = $input['action'];
 
         switch($action){
-            case '':
+            case 'state_change':
 
+                $upItems = [
+                    'id' => intval($input['id']),
+                    'state' => intval($input['state'])
+                ];
+
+                $up_rlt = $this->clsTask->update($upItems);
+
+                if($up_rlt){
+                    $rsp = $this->json_success('状态修改成功');
+                }else{
+                    $rsp = $this->json_error('状态修改失败:'.$this->clsTask->getErrorMsg());
+                }
+                return $rsp;
                 break;
             default:
                 $rsp = $this->withError(redirect(self::CONTROLLER_NAME), '未找到对应处理程序');
@@ -222,7 +269,7 @@ class TaskController extends Controller
 
         $clsTaskLogIndex = $this->clsTaskLogIndex;
 
-        $sub_title = '任务详情';
+        $sub_title = '任务日志';
 
         return view(self::CONTROLLER_NAME.'/show',compact(
             'sub_title',
@@ -230,6 +277,38 @@ class TaskController extends Controller
             'task',
             'task_logs',
             'clsTaskLogIndex'
+        ));
+    }
+
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function collect(Request $request, $id)
+    {
+        //任务详情
+        $task = $this->clsTask->getById($id,['user']);
+
+        $this->clsTaskCollectIndex->setKeywords($id);
+        $this->clsTaskCollectIndex->search(null);
+
+        //获取数据
+        $taskCollects = $this->clsTaskCollectIndex->getTaskCollects();
+
+        $clsTaskCollectIndex = $this->clsTaskCollectIndex;
+
+        $sub_title = '任务汇总';
+
+        return view(self::CONTROLLER_NAME.'/collect',compact(
+            'sub_title',
+            'id',
+            'task',
+            'taskCollects',
+            'clsTaskCollectIndex'
         ));
     }
 }

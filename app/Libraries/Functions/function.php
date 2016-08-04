@@ -134,6 +134,14 @@ function today(){
     return date('Y-m-d');
 }
 
+/**
+ * 昨天
+ * @return bool|string
+ */
+function yesterday(){
+    return date('Y-m-d',strtotime('-1 days'));
+}
+
 
 /**
  * 结束时间
@@ -353,6 +361,8 @@ function day_span($d1,$d2,$abs=true){
 
     if($abs){
         $time_span = abs($diff_seconds);
+    }else{
+        $time_span = $diff_seconds;
     }
 
     return floor($time_span / 86400);
@@ -372,4 +382,13 @@ function current_date_hours(){
  */
 function next_date_hours(){
     return  full_date(strtotime(date('Y-m-d H:00:00')) + 3600 -1);
+}
+
+/**
+ * 是否是今天
+ * @param $date
+ * @return bool
+ */
+function is_today($date){
+    return $date == short_date();
 }

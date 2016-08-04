@@ -8,6 +8,7 @@
 
 namespace App\Libraries\Cls;
 use App;
+use Illuminate\Support\Str;
 
 class User extends BaseClass
 {
@@ -30,10 +31,12 @@ class User extends BaseClass
      * @param null $old_password
      * @return bool
      */
-    function password_change($new_password,$old_password=null){
+    function password_change($id,$new_password,$old_password=null){
 
         //用户
-        $user = $this->user();
+//        $user = $this->user();
+
+        $user = $this->getById($id);
 
     /*
         if(!is_null($old_password)){
@@ -50,9 +53,12 @@ class User extends BaseClass
         //密码正确
         # $user->password = $this->password_bcrypt($new_password);
 
-        return $user->update([
-            'password' => $this->password_bcrypt($new_password)
-        ]);
+        $user->password = $new_password;
+        return $user->save();
+
+//        return $user->update([
+//            'password' => $this->password_bcrypt($new_password)
+//        ]);
     }
 
     /**

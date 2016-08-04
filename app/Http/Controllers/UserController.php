@@ -205,7 +205,7 @@ class UserController extends Controller
                 $input['old_password'] = null;
 
                 //修改密码
-                $change_success = $this->clsUser->password_change($input['new_password'],$input['old_password']);
+                $change_success = $this->clsUser->password_change($input['user_id'],$input['new_password'],$input['old_password']);
 
                 if($change_success){
                     $rsp = $this->withSuccess(redirect()->back(), '密码修改成功');

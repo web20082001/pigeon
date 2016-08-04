@@ -10,9 +10,8 @@ use App;
 use App\Libraries\Cls;
 
 
-class IndexController extends Controller
+class TestController extends Controller
 {
-
     function __construct()
     {
 
@@ -27,4 +26,5 @@ class IndexController extends Controller
     {
 
     }
+
 }

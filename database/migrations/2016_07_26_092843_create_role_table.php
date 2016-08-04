@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateRoleTable extends Migration
 {
-    const TABLE = 'role';
+    const TABLE = 'roles';
 
     /**
      * Run the migrations.
@@ -20,8 +20,9 @@ class CreateRoleTable extends Migration
             $table->increments('id');
             $table->string('name',100);
             $table->text('memo');
-            $table->timestamp('disabled_at')->nullable();
-            $table->timestamps();
+            $table->dateTime('disabled_at')->nullable();
+            $table->dateTime('created_at');
+            $table->dateTime('updated_at');
         });
     }
 

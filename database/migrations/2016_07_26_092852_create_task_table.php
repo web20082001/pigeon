@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateTaskTable extends Migration
 {
-    const TABLE = 'task';
+    const TABLE = 'tasks';
     /**
      * Run the migrations.
      *
@@ -24,10 +24,10 @@ class CreateTaskTable extends Migration
             $table->string('url',255);
             $table->string('keyword',255);
             $table->integer('per_pv');
-            $table->longText('per_pv_spread');
-            $table->timestamp('start_time');
-            $table->timestamp('end_time');
-            $table->timestamps();
+            $table->dateTime('start_time');
+            $table->dateTime('end_time');
+            $table->dateTime('created_at');
+            $table->dateTime('updated_at');
         });
     }
 

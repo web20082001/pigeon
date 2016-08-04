@@ -72,11 +72,13 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
+        /* 禁止前台注册
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+        */
     }
 
 }

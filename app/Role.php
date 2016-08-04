@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Validator;
 
 class Role extends GeneralModel
 {
-    const TABLE = 'role';
+    const TABLE = 'roles';
     public $table = self::TABLE;
     public $timestamps = true;
 

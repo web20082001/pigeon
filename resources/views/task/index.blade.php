@@ -23,5 +23,6 @@
         @include('task.data_table')
 
         <script type="text/javascript" src="{{ asset('js/WdatePicker.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/task/index.js') }}"></script>
 
     @endsection

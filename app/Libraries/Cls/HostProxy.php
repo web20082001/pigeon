@@ -33,4 +33,17 @@ class HostProxy extends BaseClass
         return $this->mHostProxy->where('host_id',$host_id)
             ->update($upItems);
     }
+
+    function getByCode($code){
+
+        $clsHost = new App\Libraries\Cls\Host();
+
+        $host_id = $clsHost->getHostId($code);
+
+        if($host_id) {
+            return $this->getByHostId($host_id);
+        }else{
+            return false;
+        }
+    }
 }

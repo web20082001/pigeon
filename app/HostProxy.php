@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Validator;
 
 class HostProxy extends GeneralModel
 {
-    const TABLE = 'host_proxy';
+    const TABLE = 'host_proxies';
     public $table = self::TABLE;
     public $timestamps = true;
 

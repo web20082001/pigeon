@@ -8,7 +8,7 @@ use Lang;
 
 class Task extends GeneralModel
 {
-    const TABLE = 'task';
+    const TABLE = 'tasks';
     public $table = self::TABLE;
     public $timestamps = true;
 
@@ -22,7 +22,7 @@ class Task extends GeneralModel
     {
         return Validator::make($data, [
             'name' => 'required',
-            'state' => 'required|numeric',
+            'state' => 'required|numeric|in:2,3',
             'enter_type' => 'required|numeric',
             'url' => 'required|url',
             'keyword' => 'required',
@@ -45,7 +45,7 @@ class Task extends GeneralModel
      */
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(User::class);
     }
 
     public function task_log(){
@@ -68,5 +68,21 @@ class Task extends GeneralModel
 
     public function end_time_short(){
         return short_date($this->end_time);
+    }
+
+    /**
+     * 可用的状态
+     * @return mixed
+     */
+    public function enabled_states(){
+        return Lang::get('models.task.'.Lang::get('models.task.state_names')[$this->state]);
+    }
+
+    /**
+     * 不能再编辑
+     * @return bool
+     */
+    public function is_can_not_edit(){
+        return  in_array($this->state,[self::CANCEL,self::FINISH]);
     }
 }

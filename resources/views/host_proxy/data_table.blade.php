@@ -11,6 +11,9 @@
             <a href="{!! $clsHostProxyIndex->getBaseLink('addr') !!}">IP</a>
         </th>
         <th>
+            <a href="{!! $clsHostProxyIndex->getBaseLink('port') !!}">端口</a>
+        </th>
+        <th>
             <a href="{!! $clsHostProxyIndex->getBaseLink('created_at') !!}">创建时间</a>
         </th>
         <th>
@@ -25,6 +28,7 @@
         <td>{{$hp->area_name}}</td>
         <td>{{$hp->remote_addr}}</td>
         <td>{{$hp->addr}}</td>
+        <td>{{$hp->port}}</td>
         <td>{{$hp->created_at}}</td>
         <td>{{$hp->updated_at}}</td>
     </tr>
@@ -32,7 +36,7 @@
     </tbody>
     <tfoot>
     <tr>
-        <th colspan="5">
+        <th colspan="6">
             {!! $host_proxys->render() !!}
         </th>
     </tr>

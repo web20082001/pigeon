@@ -55,8 +55,8 @@ class TaskIndex extends BaseClass
         $this->page_size = 20;
         $this->mTask = new App\Task();
 
-        $this->start_time = full_date_start();
-        $this->end_time = full_date_end();
+        $this->start_time = short_date();
+        $this->end_time = $this->start_time;
     }
 
 
@@ -191,7 +191,6 @@ class TaskIndex extends BaseClass
             $t.url,
             $t.keyword,
             $t.per_pv,
-            $t.per_pv_spread,
             $t.start_time,
             $t.end_time,
             $t.created_at,
@@ -200,6 +199,9 @@ class TaskIndex extends BaseClass
             $u.realname AS user_realname,
             $u.email AS user_email
         "))->paginate($this->page_size);
+
+        //昨天pv
+        $this->fill_yesterday_collect($this->tasks);
 
         return $this->tasks;
     }
@@ -281,5 +283,26 @@ class TaskIndex extends BaseClass
     public function getEndTime()
     {
         return $this->end_time;
+    }
+
+    /**
+     * 昨天汇总
+     */
+    function fill_yesterday_collect(){
+
+        //昨天
+        $clsTaskCollect = new TaskCollect();
+        $collects = $clsTaskCollect ->yesterday_task_collect($this->tasks);
+
+        foreach ($this->tasks as $i =>$t){
+
+            $amount = 0;
+            if(array_key_exists($t->id,$collects)){
+                $amount = $collects[$t->id];
+            }
+
+            $this->tasks[$i]->yesterday_finish_count = $amount;
+        }
+
     }
 }

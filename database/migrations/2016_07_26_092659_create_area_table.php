@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateAreaTable extends Migration
 {
-    const TABLE = 'area';
+    const TABLE = 'areas';
     /**
      * Run the migrations.
      *
@@ -22,8 +22,9 @@ class CreateAreaTable extends Migration
             $table->string('name',100)->unique();
             $table->string('code',100)->unique();
             $table->integer('order_sort')->default(0);
-            $table->timestamp('disabled_at')->nullable();
-            $table->timestamps();
+            $table->dateTime('disabled_at')->nullable();
+            $table->dateTime('created_at');
+            $table->dateTime('updated_at');
         });
     }
 

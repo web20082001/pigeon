@@ -26,7 +26,9 @@
     <a class="item @if(Route::current()->getPath() == 'role') active @endif" href="/role">
         权限管理
     </a>
-
+    <a class="item @if(Route::current()->getPath() == 'software') active @endif" href="/software">
+        软件管理
+    </a>
 
     {{--<div class="ui dropdown item" tabindex="0">--}}
         {{--Dropdown--}}

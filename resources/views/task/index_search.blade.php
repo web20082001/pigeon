@@ -2,12 +2,12 @@
 
 <div class="field">
     <label>开始日期</label>
-    <input type="text" class="Wdate" id="begin" name="start_time" onclick="javascript:WdatePicker({dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'end\');}',minDate:'#F{$dp.$D(\'end\',{d:-7});}'})" readonly="readonly" value="{{$clsTaskIndex->getStartTime()}}">
+    <input type="text" class="Wdate" id="begin" name="start_time" onclick="javascript:WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'end\');}',minDate:'#F{$dp.$D(\'end\',{d:-7});}'})" readonly="readonly" value="{{$clsTaskIndex->getStartTime()}}">
 </div>
 
 <div class="field">
     <label>结束日期</label>
-    <input type="text" class="Wdate" id="end" name="end_time" onclick="javascript:WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'begin\');}',maxDate:'#F{$dp.$D(\'begin\',{d:7});}'})" readonly="readonly" value="{{$clsTaskIndex->getEndTime()}}">
+    <input type="text" class="Wdate" id="end" name="end_time" onclick="javascript:WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'begin\');}',maxDate:'#F{$dp.$D(\'begin\',{d:7});}'})" readonly="readonly" value="{{$clsTaskIndex->getEndTime()}}">
 </div>
 
     <h4 class="ui header">状态</h4>

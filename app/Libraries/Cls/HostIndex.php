@@ -16,7 +16,8 @@ class HostIndex extends BaseClass
 {
 
     protected $disabled_at = 0;
-    protected $search = 'remote_addr';
+    protected $area_id = -1;
+    protected $search = 'code';
     protected $keywords = null;
     protected $order_by = 'id';
     protected $dir = 'desc';
@@ -116,6 +117,11 @@ class HostIndex extends BaseClass
         //表别名
         $a = App\Host::TABLE;
 
+        //地区
+        if ($this->area_id > 0) {
+            $query = $query->where($a . '.area_id',$this->area_id);
+        }
+
         //故障状态
         if ($this->disabled_at == -1) {
             //不限
@@ -132,6 +138,9 @@ class HostIndex extends BaseClass
 
             switch($this->search){
                 case 'remote_addr':
+                case 'code':
+                case 'contact':
+
                     $query = $query->where($a.'.'.$this->search, 'like','%'.$this->keywords.'%');
                     break;
                 default:
@@ -246,5 +255,13 @@ class HostIndex extends BaseClass
     public function getDisabledAt()
     {
         return $this->disabled_at;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAreaId()
+    {
+        return $this->area_id;
     }
 }

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 class Area extends GeneralModel
 {
-    const TABLE = 'area';
+    const TABLE = 'areas';
     public $table = self::TABLE;
     public $timestamps = true;
 

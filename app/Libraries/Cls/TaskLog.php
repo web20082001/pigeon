@@ -15,10 +15,12 @@ use Illuminate\Support\Facades\Config;
 class TaskLog extends BaseClass
 {
     private $mTaskLog;
+    private $clsTaskCollect;
 
     function __construct(){
         $this->mTaskLog = new App\TaskLog();
         $this->model = $this->mTaskLog;
+        $this->clsTaskCollect = new TaskCollect();
     }
 
     function add($input){
@@ -76,6 +78,18 @@ class TaskLog extends BaseClass
         }
 
     }
+
+
+    /**
+     * 领取当前小时内任务的订单
+     * @param $host_id
+     * @return mixed
+     */
+    function getHoursTaskLog($host_id){
+        //新的
+        return $this->getUnStartWithQueue($host_id);
+    }
+
 
     /**
      * 公共查询
@@ -183,15 +197,13 @@ class TaskLog extends BaseClass
             $this->error_msg = '没有可获取的任务订单';
             return null;
         }
-
     }
-
 
     /**
      * 获取还未开始，可领取的
      * @return mixed
      */
-    function getUnStart(){
+    function getUnStartBase(){
 
         $t = App\Task::TABLE;
         $tl = App\TaskLog::TABLE;
@@ -204,9 +216,47 @@ class TaskLog extends BaseClass
             ->where($t.'.state',App\Task::START)
             ->whereBetween($tl.'.expect_time',[current_date_hours(), next_date_hours()])
             ->orderBy($tl.'.expect_time','asc');
+        return $query;
+    }
+
+    /**
+     * 获取还未开始，可领取的
+     * @return mixed
+     */
+    function getUnStart(){
+
+        //先获取是否已领到未完成的
+        $query = $this->getUnStartBase();
 
         return $this->querySelect($query)->first();
+    }
 
+
+    /**
+     * 获取还未开始，可领取的
+     * @return mixed
+     */
+    function getHoursUnStart(){
+
+        $t = App\Task::TABLE;
+        $tl = App\TaskLog::TABLE;
+
+        //先获取是否已领到未完成的
+        $query = $this->getUnStartBase();
+        $query->select(DB::raw("
+                 
+            $t.keyword,
+            $t.url,
+            $t.enter_type,
+            
+            $tl.id,
+            $tl.task_id,
+            $tl.expect_time
+        "));
+
+        $query->orderBy('expect_time', 'asc');
+
+        return $query->get();
     }
 
     /**
@@ -214,13 +264,21 @@ class TaskLog extends BaseClass
      * @param $id
      * @return bool
      */
-    function finish($id){
+    function finish($id,$host_id){
         //获取任务订单
         $task_log = $this->getById($id);
 
         if(is_null($task_log->end_time)){
+            $task_log->host_id = $host_id;
             $task_log->end_time = Carbon::now()->toDateTimeString();
-            return $task_log->save();
+            $save_success = $task_log->save();
+
+            if($save_success){
+                //同时更新已完成数量
+                $this->clsTaskCollect->finishIncrease($task_log->task_id);
+            }
+
+            return $save_success;
         }else{
             //已保存成功
             return true;

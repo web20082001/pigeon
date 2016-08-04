@@ -71,21 +71,50 @@ class ApiController extends Controller
             'action',
             'id',
             'code',
-            'addr'
+            'addr',
+            'port'
         ]);
 
         //动作
         $action = strtolower($input['action']);
 
         switch($action){
+            case 'hours_order':
+                //获取订单
+                $task_logs = $this->clsApi->getHoursTaskLog();
+
+                if($task_logs){
+                    $resp = $this->json_success('任务订单获取成功',$task_logs->toArray());
+                }else{
+                    $resp = $this->json_error('任务订单获取失败');
+                }
+
+                return $resp;
+                break;
+
             case 'order':
                 //获取订单
                 return $this->getOrder($input['code']);
                 break;
 
+            case 'host':
+                //获取所有主机
+                $host = new App\Libraries\Cls\Host();
+
+                $hosts = $host->apiAll();
+
+                if($hosts){
+                    $resp = $this->json_success('主机获取成功',$hosts);
+                }else{
+                    $resp = $this->json_error('主机获取失败',$hosts);
+                }
+
+                return $resp;
+                break;
+
             case 'finish':
                 //订单设置已完成
-                $is_success = $this->clsApi->taskLogFinish($input['id']);
+                $is_success = $this->clsApi->taskLogFinish($input['id'],$input['code']);
                 if($is_success){
                     $resp = $this->json_success('任务订单更新成功');
                 }else{
@@ -123,7 +152,7 @@ class ApiController extends Controller
                 }
 
                 //获取主机的代理ip
-                $is_success = $this->clsApi->host_proxy_update($input['code'], $input['addr']);
+                $is_success = $this->clsApi->host_proxy_update($input['code'], $input['addr'],$input['port']);
 
                 if($is_success){
                     $resp = $this->json_success('代理IP更新成功');
@@ -132,6 +161,32 @@ class ApiController extends Controller
                 }
                 return $resp;
                 break;
+            case 'reset_ip':
+                //获取订单
+                $reset_success = $this->clsApi->host_reset_ip($input['code']);
+
+                if($reset_success){
+                    $resp = $this->json_success('代理重置成功');
+                }else{
+                    $resp = $this->json_error('代理重置失败:'.$this->clsApi->getErrorMsg());
+                }
+                return $resp;
+
+                break;
+
+            case 'software':
+                //获取订单
+                $software = $this->clsApi->software($input['code']);
+
+                if($software){
+                    $resp = $this->json_success('软件信息获取成功',$software->toArray());
+                }else{
+                    $resp = $this->json_error('软件信息获取成功失败:'.$this->clsApi->getErrorMsg());
+                }
+                return $resp;
+
+                break;
+
             default:
                 break;
         }

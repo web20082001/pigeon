@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateHostProxyTable extends Migration
 {
-    const TABLE = 'host_proxy';
+    const TABLE = 'host_proxies';
 
     /**
      * Run the migrations.
@@ -20,8 +20,9 @@ class CreateHostProxyTable extends Migration
             $table->increments('id');
             $table->integer('host_id');
             $table->string('addr',30);
-            $table->integer('area_id');
-            $table->timestamps();
+            $table->integer('port');
+            $table->dateTime('created_at');
+            $table->dateTime('updated_at');
         });
     }
 

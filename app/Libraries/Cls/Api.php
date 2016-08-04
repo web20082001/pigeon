@@ -23,18 +23,20 @@ class Api extends BaseClass
     }
 
     /**
- * 获取主机id
- * @param $code
- * @return bool
- */
+     * 获取主机id
+     * @param $code
+     * @return bool
+     */
     function getHostId($code){
-        $host = $this->clsHost->getByCode($code);
-        if(!$host){
+
+        $host_id = $this->clsHost->getHostId($code);
+
+        if(!$host_id){
             //错误原因
-            $this->error_msg = '主机编号不存在';
+            $this->error_msg = $this->clsHost->getErrorMsg();
             return false;
         }
-        return $host->id;
+        return $host_id;
     }
 
     /**
@@ -75,13 +77,31 @@ class Api extends BaseClass
     }
 
     /**
+     * 获取当前小时所能可处理任务
+     * @return mixed
+     */
+    function getHoursTaskLog(){
+        return $this->clsTaskLog->getHoursUnStart();
+    }
+
+    /**
      * 订单设置已完成
      * @param $id
      * @return bool
      */
-    function taskLogFinish($id){
+    function taskLogFinish($id,$code){
 
-        return $this->clsTaskLog->finish($id);
+        $host_id = $this->getHostId($code);
+
+        if($host_id) {
+
+            return $this->clsTaskLog->finish($id,$host_id);
+        }else{
+            return false;
+        }
+
+
+
 
     }
 
@@ -107,7 +127,7 @@ class Api extends BaseClass
      * @param $addr
      * @return bool
      */
-    function host_proxy_update($code, $addr){
+    function host_proxy_update($code, $addr, $port){
 
         $host = $this->getHost($code);
 
@@ -119,17 +139,61 @@ class Api extends BaseClass
 
             if($host_proxy){
                 $host_proxy->addr = $addr;
+                $host_proxy->port = $port;
                 return $host_proxy->save();
             }else{
                 return $this->clsHostProxy->add([
                     'host_id' => $host_id,
                     'addr' => $addr,
+                    'port' => $port,
                     'area_id' =>$host->area_id
                 ]);
             }
 
-
         }else{
+            return false;
+        }
+    }
+
+    /**
+     * 重置主机ip
+     * @param $code
+     * @return bool
+     */
+    function host_reset_ip($code){
+
+        //重置主机ip链接
+        $reset_url = $this->clsHost->reset_ip_url($code);
+
+        if(!$reset_url){
+            $this->error_msg = $this->clsHost->getErrorMsg();
+            return false;
+        }
+
+        $clsRequest = new App\Libraries\Cls\Request();
+        $clsRequest->get($reset_url);
+
+        //状态
+        $status = $clsRequest->status();
+        //返回内容
+        $results = $clsRequest->results();
+
+        if($status == 200 && $results == 'ok'){
+            return true;
+        }else{
+            $this->error_msg = $results;
+            return false;
+        }
+    }
+
+    function software($code){
+        $clsSoftware = new App\Libraries\Cls\Software();
+        $software = $clsSoftware->getByCode($code);
+
+        if($software){
+            return $software;
+        }else{
+            $this->error_msg = '没有找到对应软件信息';
             return false;
         }
     }

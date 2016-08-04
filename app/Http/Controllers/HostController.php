@@ -37,6 +37,9 @@ class HostController extends Controller
         //获取数据
         $hosts = $this->clsHostIndex->getHosts();
 
+        //所有城市
+        $areas = $this->clsArea->cities();
+
         $clsHostIndex = $this->clsHostIndex;
 
         $sub_title = '主机列表';
@@ -44,7 +47,8 @@ class HostController extends Controller
         return view(self::CONTROLLER_NAME.'/index',compact(
             'sub_title',
             'hosts',
-            'clsHostIndex'
+            'clsHostIndex',
+            'areas'
         ));
     }
 
@@ -56,7 +60,7 @@ class HostController extends Controller
     public function create()
     {
         // 地区
-        $areas = $this->clsArea->all();
+        $areas = $this->clsArea->cities();
 
         $expire_time = short_date();
 
@@ -65,7 +69,8 @@ class HostController extends Controller
         return view(self::CONTROLLER_NAME.'/create',compact(
             'sub_title',
             'areas',
-            'expire_time'
+            'expire_time',
+            'cities'
         ));
     }
 
@@ -123,7 +128,7 @@ class HostController extends Controller
     {
         $host = $this->clsHost->getById($id);
         // 地区
-        $areas = $this->clsArea->all();
+        $areas = $this->clsArea->cities();
 
         $sub_title = '主机列表';
 

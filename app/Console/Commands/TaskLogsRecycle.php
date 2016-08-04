@@ -12,14 +12,14 @@ class TaskLogsRecycle extends Command
      *
      * @var string
      */
-    protected $signature = 'recycle:task_logs';
+    protected $signature = 'task_log:recycle';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'recycle task_logs';
+    protected $description = 'task_logs recycle';
 
 
     private $clsTaskLog;

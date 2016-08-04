@@ -39,3 +39,10 @@ a.delete{
 .green{
     color:green;
 }
+/*背景色*/
+.bg-green{
+    background-color:green;
+}
+.bg-red{
+    background-color:red;
+}

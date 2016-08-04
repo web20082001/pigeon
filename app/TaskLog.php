@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TaskLog extends GeneralModel
 {
-    const TABLE = 'task_log';
+    const TABLE = 'task_logs';
     public $table = self::TABLE;
     public $timestamps = false;
 

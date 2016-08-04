@@ -19,7 +19,7 @@
     </div>
 
     <div class="field">
-    <h4 class="ui header">地区</h4>
+    <h4 class="ui header">城市</h4>
     <select name="area_id" class="ui fluid normal dropdown">
         <option value="-1">请选择</option>
         @foreach ($areas as $a)

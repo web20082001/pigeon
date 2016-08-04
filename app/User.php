@@ -3,9 +3,12 @@
 namespace App;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
 
 class User extends Authenticatable
 {
+    use CanResetPassword;
+
     const TABLE = 'users';
     public $table = self::TABLE;
     public $timestamps = true;
@@ -80,4 +83,7 @@ class User extends Authenticatable
         $this->attributes['password'] = bcrypt($value);
     }
 
+    public function tasks(){
+        $this->hasMany(Task::class);
+    }
 }

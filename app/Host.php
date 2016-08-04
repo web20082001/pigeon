@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Validator;
 
 class Host extends GeneralModel
 {
-    const TABLE = 'host';
+    const TABLE = 'hosts';
     public $table = self::TABLE;
     public $timestamps = true;
 

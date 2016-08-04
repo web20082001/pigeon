@@ -38,5 +38,8 @@ return [
     ],
 
     //任务未完成超时多久回收 单位:分钟
-    'recycle_timeout_minutes' => 30
+    'recycle_timeout_minutes' => 30,
+
+    //重置ip的端口
+    'reset_ip_port' => 6086
 ];

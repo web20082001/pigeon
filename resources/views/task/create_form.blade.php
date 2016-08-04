@@ -15,15 +15,6 @@
         <input type="text" name="url" value="{{old('url')}}">
     </div>
 
-    <div class="field">
-        <h4 class="ui header">状态</h4>
-        {!! Form::select(
-            'state',
-            Lang::get('models.task.state'),
-            2,
-            array('class'=>'ui fluid normal dropdown'))
-        !!}
-    </div>
 
     <div class="field">
         <h4 class="ui header">进入类型</h4>
@@ -43,13 +34,25 @@
 
     <div class="field">
         <label>开始日期</label>
-        <input type="text" class="Wdate" id="begin" name="start_time" onclick="javascript:WdatePicker({dateFmt:'yyyy-MM-dd HH:00:00',maxDate:'#F{$dp.$D(\'end\');}',minDate:'#F{$dp.$D(\'end\',{d:-7});}'})" readonly="readonly" value="{{$start_time}}">
+        <input type="text" class="Wdate" id="begin" name="start_time" onclick="javascript:WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'end\');}',minDate:'#F{$dp.$D(\'end\',{d:-7});}'})" readonly="readonly" value="{{$start_time}}">
     </div>
 
     <div class="field">
         <label>结束日期</label>
-        <input type="text" class="Wdate" id="end" name="end_time" onclick="javascript:WdatePicker({dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'begin\');}',maxDate:'#F{$dp.$D(\'begin\',{d:7});}'})" readonly="readonly" value="{{$end_time}}">
+        <input type="text" class="Wdate" id="end" name="end_time" onclick="javascript:WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'begin\');}',maxDate:'#F{$dp.$D(\'begin\',{d:7});}'})" readonly="readonly" value="{{$end_time}}">
     </div>
+
+
+<div class="field">
+    <h4 class="ui header">操作</h4>
+    {!! Form::select(
+        'state',
+        Lang::get('models.task.state_create'),
+        2,
+        array('class'=>'ui fluid normal dropdown'))
+    !!}
+</div>
+
 
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     {!! Form::submit('添加',['class'=>'ui primary button']) !!}

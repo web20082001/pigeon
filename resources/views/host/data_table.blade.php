@@ -39,10 +39,10 @@
             {!! Form::open(array('action' => array('HostController@destroy', $a->id), 'method'=>'post')) !!}
                 <input name="_method" type="hidden" value="delete">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <a class="delete">删除</a>
                 <button type="submit" class="hidden">删除</button>
-                /
-                <a href="/host/{{$a->id}}/edit">编辑</a>
+                {{--<a class="delete">删除</a>--}}
+                {{--/--}}
+                <a href="/host/{{$a->id}}/edit" target="_blank">编辑</a>
             </form>
             {!! Form::close() !!}
 

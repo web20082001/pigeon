@@ -18,10 +18,12 @@ class Task extends BaseClass{
     private $mTask;
     private $mTaskLog;
     private $clsTaskLog;
+    private $clsTaskCollect;
 
     function __construct(){
         $this->mTask = new App\Task();
         $this->mTaskLog = new App\TaskLog();
+        $this->cTaskCollect = new TaskCollect();
         $this->model = $this->mTask;
     }
 
@@ -141,12 +143,6 @@ class Task extends BaseClass{
         //设置添加用户
         $input['user_id'] = $this->userId();
 
-        //每小时pv计算
-        $per_pv_spread = $this->per_pv_spread_by_per_pv($input['per_pv']);
-
-        //转为json存储
-        $input['per_pv_spread'] = json_encode($per_pv_spread, JSON_FORCE_OBJECT);
-
         //更新model
         $this->mTask = model_update($this->mTask,$input);
 
@@ -170,6 +166,25 @@ class Task extends BaseClass{
 
         foreach ($pass_days as $date){
 
+            //添加汇总信息
+            $taskCollect = [
+                'task_id'   => $task_id,
+                'collect_date'  => $date,
+                'per_pv' => $input['per_pv']
+            ];
+
+            $cTaskCollect = new TaskCollect();
+            $taskCollect_add = $cTaskCollect->add($taskCollect);
+
+            if(!$taskCollect_add){
+                $this->error_msg = '任务汇总数据添加失败';
+                DB::rollback();
+                return false;
+            }
+
+            //每小时pv计算
+            $per_pv_spread = $this->per_pv_spread_by_per_pv($date,$input['per_pv']);
+
             //默认每小时pv
             foreach($per_pv_spread as $hour => $count){
 
@@ -187,11 +202,11 @@ class Task extends BaseClass{
                         return false;
                     }
                 }
-
             }
         }
 
         DB::commit();
+
         return true;
     }
 
@@ -199,14 +214,50 @@ class Task extends BaseClass{
      * 有效的每小时分布
      * @return array
      */
-    function valid_hours_pv(){
+    function valid_hours_pv($date){
+
         //默认pv每小时分布
         $day_hours_pv_percent = Config::get('constants.day_hours_pv_percent');
 
-        //只取大于0的
-        return array_filter ( $day_hours_pv_percent ,function($v){
-            return $v > 0;
-        });
+        //日期差
+        $day_span = day_span(today(),$date,false);
+
+        //当前小时
+        $current_hours = intval(date('H'));
+        //当前分钟
+        $current_minutes = intval(date('i'));
+
+        //有效小时
+        $valid_hours = [];
+
+        foreach ($day_hours_pv_percent as $hours =>$v){
+
+            if($day_span > 0){
+                //明天
+            }else if($day_span == 0){
+                //今天
+                if($hours < $current_hours){
+                    //小于当前小时，全不要
+                    continue;
+                }else if($hours == $current_hours){
+                    //等于当前小时，大于半点的，不要
+                    if ($current_minutes >= 30){
+                        continue;
+                    }else{
+                        //小于30分的要
+                    }
+                }else{
+                    //大于当前小时的要
+                    $valid_hours[$hours] = $v;
+                }
+            }
+
+            if($v > 0){
+                $valid_hours[$hours] = $v;
+            }
+        }
+
+        return $valid_hours;
     }
 
     /**
@@ -214,7 +265,63 @@ class Task extends BaseClass{
      * @param $per_pv
      * @return array
      */
-    function per_pv_spread_by_per_pv($per_pv){
+    function per_pv_spread_by_per_pv($date,$per_pv){
+
+        //有效pv
+        $valid_hours_pv = $this->valid_hours_pv($date);
+
+        //未分配的数量
+        $left_pv = $per_pv;
+
+        $hours_pv = [];
+        foreach($valid_hours_pv as $h => $p){
+
+            //分配量
+            $amount = floor(floatval($per_pv * $p / 100));
+
+            $left_pv -= $amount;
+
+            if($left_pv == 0){
+                //分完跳出
+                break;
+            }else if($left_pv < 0){
+                $amount = $left_pv;
+            }
+
+            //按比例分配量
+            $hours_pv[$h] = $amount;
+        }
+
+
+        //还有余量
+        if($left_pv > 0){
+            //剩余小时平均分
+            $hours_avg_count = intval(floatval($left_pv / count($valid_hours_pv)));
+
+            //求余
+            $hours_mod_count = $left_pv % count($valid_hours_pv);
+
+            foreach ($hours_pv as $h => $v){
+
+                if($hours_mod_count > 0){
+                    //余量加到第一个小时
+                    $hours_pv[$h] += $hours_mod_count;
+                    $hours_mod_count = 0;
+                }
+
+                $hours_pv[$h] += $hours_avg_count;
+            }
+        }
+
+        return $hours_pv;
+    }
+
+    /**
+     * 默认每小时分布
+     * @param $per_pv
+     * @return array
+     */
+    function per_pv_spread_by_per_pv_origin($per_pv){
         //每小时分布
         $day_hours_pv_percent = Config::get('constants.day_hours_pv_percent');
 
@@ -251,6 +358,57 @@ class Task extends BaseClass{
 
         //间隔几天
         $days_count = $this->pass_days($input['start_time'], $input['end_time']);
+
+
+    }
+
+    /**
+     * 回收超时未完成的订单
+     * @return mixed
+     */
+    function autoFinish(){
+
+        $t = App\Task::TABLE;
+
+        //先获取是否已领到未完成的
+        return $this->mTask
+            ->where($t.'.state',App\Task::START)
+            ->where($t.'.end_time','<',full_date())
+            ->update([
+                $t.'.state'=> App\Task::FINISH
+            ]);
+    }
+
+    /**
+     * 任务是否可编辑
+     * @param $task
+     * @return bool
+     */
+    function is_can_not_edit($task){
+        return $task->is_can_not_edit();
+    }
+
+    function update($upItems){
+
+        if(array_key_exists('id',$upItems)){
+
+            $id = $upItems['id'];
+
+            $task = $this->getById($id);
+
+            //是否可编辑，取消和完成不可编辑
+            $is_can_not_edit = $this->is_can_not_edit($task);
+
+            if($is_can_not_edit){
+                $this->error_msg = '任务状态不允许再编辑';
+                return false;
+            }else{
+                return parent::update($upItems);
+            }
+
+        }else{
+            return false;
+        }
 
 
     }

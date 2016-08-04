@@ -43,9 +43,11 @@
                 <input name="_method" type="hidden" value="delete">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <button type="submit" class="hidden">删除</button>
-                <a class="delete">删除</a>
+                {{--<a class="delete">删除</a>--}}
+                {{--/--}}
+                <a href="/user/{{$a->id}}/edit" target="_blank">编辑</a>
                 /
-                <a href="/user/{{$a->id}}/edit">编辑</a>
+                <a href="/user/{{$a->id}}/password">密码</a>
             </form>
             {!! Form::close() !!}
 
