@@ -8,7 +8,14 @@
       array('class'=>'ui fluid normal dropdown'))
     !!}
 
+    <h4 class="ui header">省</h4>
 
+<select name="parent_id" class="ui fluid normal dropdown">
+    <option value="-1">请选择</option>
+    @foreach ($provinces as $a)
+        <option value="{{$a->id}}"@if($a->id == $clsAreaIndex->getParentId()) selected @endif>{{$a->name}}</option>
+    @endforeach
+</select>
 
     <h4 class="ui header">查询条件</h4>
     {!! Form::select(

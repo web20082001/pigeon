@@ -24,4 +24,11 @@ class HostProxy extends GeneralModel
         return self::storeValidator($data);
     }
 
+    public static function hostProxyValidator(array $data)
+    {
+        return Validator::make($data, [
+            'code' => 'required'
+        ]);
+    }
+
 }

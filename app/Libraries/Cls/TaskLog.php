@@ -102,7 +102,7 @@ class TaskLog extends BaseClass
         $tl = App\TaskLog::TABLE;
 
         return $query->select(DB::raw("
-                $t.id,
+                $tl.id,
                 $t.user_id,
                 $t.name,
                 $t.state,
@@ -168,7 +168,7 @@ class TaskLog extends BaseClass
 
             //用户余额，锁定
             $task_log_locked = $this->mTaskLog->where('id',$task_log->id)->lockForUpdate()->first();
-
+            
             if(is_null($task_log_locked->start_time)
                 && is_null($task_log_locked->host_id)){
                 //无开始时间和主机

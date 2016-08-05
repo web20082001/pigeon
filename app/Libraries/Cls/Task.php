@@ -273,25 +273,27 @@ class Task extends BaseClass{
         //未分配的数量
         $left_pv = $per_pv;
 
+        $sum = 0;
         $hours_pv = [];
         foreach($valid_hours_pv as $h => $p){
 
             //分配量
-            $amount = floor(floatval($per_pv * $p / 100));
+            $amount = ceil(floatval($per_pv * $p / 100));
 
             $left_pv -= $amount;
 
             if($left_pv == 0){
                 //分完跳出
+                $hours_pv[$h] = $amount;
                 break;
             }else if($left_pv < 0){
-                $amount = $left_pv;
+                $amount = $left_pv + abs($amount);
+                $left_pv = 0;
             }
 
             //按比例分配量
             $hours_pv[$h] = $amount;
         }
-
 
         //还有余量
         if($left_pv > 0){

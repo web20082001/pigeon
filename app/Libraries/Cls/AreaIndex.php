@@ -14,6 +14,7 @@ use DB;
 class AreaIndex extends BaseClass
 {
 
+    protected $parent_id = -1;
     protected $disabled_at = 0;
     protected $search = null;
     protected $keywords = null;
@@ -126,13 +127,24 @@ class AreaIndex extends BaseClass
             $query = $query->whereNotNull($a . '.disabled_at');
         }
 
+        //省
+        if ($this->parent_id > 0) {
+            //不限
+            $query = $query->where($a . '.parent_id',$this->parent_id)
+                    ->orWhere($a . '.id',$this->parent_id);
+        }else{
+
+
+        }
+
         //查询条件
         if($this->search != '' && $this->keywords != ''){
 
             switch($this->search){
                 case 'name':
                 case 'code':
-                    $query = $query->where($a.'.'.$this->search, 'like','%'.$this->keywords.'%');
+                    $query = $query->where($a.'.parent_id','>','0')
+                        ->where($a.'.'.$this->search, 'like','%'.$this->keywords.'%');
                     break;
                 default:
                     break;
@@ -242,5 +254,13 @@ class AreaIndex extends BaseClass
     public function getDisabledAt()
     {
         return $this->disabled_at;
+    }
+
+    /**
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->parent_id;
     }
 }

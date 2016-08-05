@@ -176,8 +176,8 @@ class HostProxyIndex extends BaseClass
             $hp.created_at,
             $hp.updated_at,
             $a.name AS area_name,
-            $h.remote_addr
-            $h.area_id,
+            $h.remote_addr,
+            $h.area_id
         "))->paginate($this->page_size);
 
         return $this->hostProxys;

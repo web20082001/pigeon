@@ -15,8 +15,6 @@ class TaskLogIndex extends BaseClass
 {
 
     protected $disabled_at = -1;
-
-
     protected $search = null;
     protected $keywords = null;
     protected $order_by = 'id';
@@ -30,6 +28,9 @@ class TaskLogIndex extends BaseClass
 
     //排序链接
     protected $base_link;
+
+    //参数
+    public $params=[];
 
     /**
      * @return mixed
@@ -92,6 +93,7 @@ class TaskLogIndex extends BaseClass
 
             //只获取指定的变量
             $params = $request->only($vars);
+            $this->params = $params;
 
             //设置排序链接
             $this->base_link($request->path(), $params);
@@ -105,6 +107,14 @@ class TaskLogIndex extends BaseClass
                 }
             }
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
     }
 
     /**
@@ -135,6 +145,9 @@ class TaskLogIndex extends BaseClass
                 case 'name':
                 case 'code':
                     $query = $query->where($a.'.'.$this->search, 'like','%'.$this->keywords.'%');
+                    break;
+                case 'task_id':
+                    $query = $query->where($a.'.'.$this->search, '=',$this->keywords);
                     break;
                 default:
                     break;
@@ -243,5 +256,21 @@ class TaskLogIndex extends BaseClass
     public function getDisabledAt()
     {
         return $this->disabled_at;
+    }
+
+    /**
+     * @param null $search
+     */
+    public function setSearch($search)
+    {
+        $this->search = $search;
+    }
+
+    /**
+     * @param null $keywords
+     */
+    public function setKeywords($keywords)
+    {
+        $this->keywords = $keywords;
     }
 }

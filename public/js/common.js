@@ -27,6 +27,12 @@ $(function () {
         }
     });
 
+
+    //checkbox
+    $('.ui.radio.checkbox').checkbox();
+
+
+
     //搜索关键词
     $keywords = $('input[name="keywords"]');
 

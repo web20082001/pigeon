@@ -45,6 +45,18 @@ class Area extends BaseClass
     }
 
     /**
+     * 所有可用省
+     */
+    function provinces()
+    {
+        return $this->mArea
+            ->where('parent_id','=',0)
+            ->whereNull('disabled_at')
+            ->orderBy('id','asc')
+            ->get();
+    }
+
+    /**
      * 所有可用城市
      */
     function cities()

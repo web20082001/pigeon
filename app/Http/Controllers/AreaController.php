@@ -33,6 +33,9 @@ class AreaController extends Controller
         $this->clsAreaIndex->search($request);
 
         //获取数据
+        $provinces = $this->clsArea->provinces();
+
+        //获取数据
         $areas = $this->clsAreaIndex->getAreas();
 
         $clsAreaIndex = $this->clsAreaIndex;
@@ -42,6 +45,7 @@ class AreaController extends Controller
         return view(self::CONTROLLER_NAME.'/index',compact(
             'sub_title',
             'areas',
+            'provinces',
             'clsAreaIndex'
         ));
     }

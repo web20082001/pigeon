@@ -9,7 +9,7 @@ return [
     ],
 
     'area' => [
-        'name' => '省/市',
+        'name' => '市',
         'code' => '编号'
     ],
 

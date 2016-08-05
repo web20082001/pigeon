@@ -126,10 +126,10 @@ class ApiController extends Controller
             case 'host_proxy':
 
                 //验证
-                $validator = App\HostProxy::storeValidator($input);
+                $validator = App\HostProxy::hostProxyValidator($input);
 
                 if ($validator->fails()) {
-                    return redirect()->back()->withInput()->withErrors($validator);
+                    return $this->json_error('验证未通过，请检查参数是否正确');
                 }
 
                 //获取主机的代理ip

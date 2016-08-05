@@ -262,6 +262,9 @@ class TaskController extends Controller
         //任务详情
         $task = $this->clsTask->getById($id,['user']);
 
+
+        $this->clsTaskLogIndex->setSearch('task_id');
+        $this->clsTaskLogIndex->setKeywords($id);
         $this->clsTaskLogIndex->search($request);
 
         //获取数据
@@ -294,7 +297,7 @@ class TaskController extends Controller
         $task = $this->clsTask->getById($id,['user']);
 
         $this->clsTaskCollectIndex->setKeywords($id);
-        $this->clsTaskCollectIndex->search(null);
+        $this->clsTaskCollectIndex->search($request);
 
         //获取数据
         $taskCollects = $this->clsTaskCollectIndex->getTaskCollects();

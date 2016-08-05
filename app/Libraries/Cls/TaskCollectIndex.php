@@ -158,6 +158,9 @@ class TaskCollectIndex extends BaseClass
 
         $query = $this->mTaskCollect;
 
+        //查询条件
+        $query = $this->search_where($query);
+
         //查询
         $this->taskCollects = $query->select(DB::raw("
             $a.id,

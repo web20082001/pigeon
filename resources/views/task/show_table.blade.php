@@ -40,7 +40,7 @@
     <tfoot>
     <tr>
         <th colspan="10">
-            {!! $task_logs->render() !!}
+            {!! $task_logs->appends($clsTaskLogIndex->getParams())->render() !!}
         </th>
     </tr>
     </tfoot>
