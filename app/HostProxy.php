@@ -15,7 +15,8 @@ class HostProxy extends GeneralModel
     public static function storeValidator(array $data)
     {
         return Validator::make($data, [
-            'addr' => 'required|ip'
+            'addr' => 'required|ip',
+            'port' => 'required|numeric'
         ]);
     }
 

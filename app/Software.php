@@ -18,7 +18,6 @@ class Software extends GeneralModel
             'name' => 'required',
             'code' => 'required',
             'version' => 'required',
-            'size' => 'required',
             'url' => 'required|url'
         ]);
     }

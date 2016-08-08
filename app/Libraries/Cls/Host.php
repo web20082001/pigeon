@@ -36,11 +36,15 @@ class Host  extends BaseClass
     function apiAll(){
 
         $h = App\Host::TABLE;
+        $a = App\Area::TABLE;
 
-        $query = $this->mHost->whereNull($h . '.disabled_at');
+        $query = $this->mHost
+            ->join($a,$a.'.id','=',$h.'.area_id')
+            ->whereNull($h . '.disabled_at');
 
         return $query->select(DB::raw("
-            $h.code
+            $h.code,
+            $a.name AS area_name
         "))->get();
     }
 

@@ -1143,7 +1143,7 @@ class Snoopy
 
 		$this->status = 0;
 		
-		if($fp = fsockopen(
+		if($fp = @fsockopen(
 					$host,
 					$port,
 					$errno,

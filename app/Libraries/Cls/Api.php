@@ -8,6 +8,8 @@
 
 namespace App\Libraries\Cls;
 use App;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Config;
 
 class Api extends BaseClass
 {
@@ -87,15 +89,16 @@ class Api extends BaseClass
     /**
      * 订单设置已完成
      * @param $id
+     * @param $addr
      * @return bool
      */
-    function taskLogFinish($id,$code){
+    function taskLogFinish($id,$code,$addr){
 
         $host_id = $this->getHostId($code);
 
         if($host_id) {
 
-            return $this->clsTaskLog->finish($id,$host_id);
+            return $this->clsTaskLog->finish($id,$host_id,$addr);
         }else{
             return false;
         }
@@ -138,9 +141,13 @@ class Api extends BaseClass
             $host_proxy = $this->clsHostProxy->getByHostId($host_id);
 
             if($host_proxy){
-                $host_proxy->addr = $addr;
-                $host_proxy->port = $port;
-                return $host_proxy->save();
+
+                return $this->clsHostProxy->updateByHostId($host_id,[
+                    'addr' => $addr,
+                    'port' => $port,
+                    'updated_at' => Carbon::now()->toDateTimeString(),
+                ]);
+
             }else{
                 return $this->clsHostProxy->add([
                     'host_id' => $host_id,
@@ -170,6 +177,7 @@ class Api extends BaseClass
             return false;
         }
 
+        $reset_url = 'http://'.$reset_url.':'.Config::get('constants.reset_ip_port');
         $clsRequest = new App\Libraries\Cls\Request();
         $clsRequest->get($reset_url);
 
@@ -181,7 +189,7 @@ class Api extends BaseClass
         if($status == 200 && $results == 'ok'){
             return true;
         }else{
-            $this->error_msg = $results;
+            $this->error_msg = $clsRequest->error();
             return false;
         }
     }

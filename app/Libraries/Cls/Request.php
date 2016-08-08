@@ -22,12 +22,18 @@ class Request
     }
 
     function get($url){
+        //超时时间
+        $this->clsSnoopy->_fp_timeout = 5;
         $this->clsSnoopy->fetch($url);
     }
 
     function results(){
         $this->results = $this->clsSnoopy->results;
         return $this->results;
+    }
+
+    function error(){
+        return $this->clsSnoopy->error;
     }
 
     function status(){

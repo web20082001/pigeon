@@ -8,6 +8,7 @@
 
 namespace App\Libraries\Cls;
 use App;
+use DB;
 
 class HostProxy extends BaseClass
 {
@@ -24,9 +25,25 @@ class HostProxy extends BaseClass
         return $this->mHostProxy->save($input);
     }
 
+
     function getByHostId($host_id){
-        return $this->mHostProxy->where('host_id',$host_id)
-        ->first();
+
+        $h = App\Host::TABLE;
+        $hp = App\HostProxy::TABLE;
+        $a = App\Area::TABLE;
+
+        return $this->mHostProxy
+            ->join($h,$h.'.id','=',$hp.'.host_id')
+            ->join($a,$a.'.id','=',$h.'.area_id')
+            ->where($hp.'.host_id',$host_id)
+            ->select(DB::raw("
+                $h.code,
+                $hp.addr,
+                $hp.port,
+                $a.name AS area_name,
+                $hp.updated_at            
+            "))
+            ->first();
     }
 
     function updateByHostId($host_id,$upItems){

@@ -168,7 +168,7 @@ class TaskLog extends BaseClass
 
             //用户余额，锁定
             $task_log_locked = $this->mTaskLog->where('id',$task_log->id)->lockForUpdate()->first();
-            
+
             if(is_null($task_log_locked->start_time)
                 && is_null($task_log_locked->host_id)){
                 //无开始时间和主机
@@ -244,13 +244,10 @@ class TaskLog extends BaseClass
         //先获取是否已领到未完成的
         $query = $this->getUnStartBase();
         $query->select(DB::raw("
-                 
+            $tl.id,     
             $t.keyword,
             $t.url,
             $t.enter_type,
-            
-            $tl.id,
-            $tl.task_id,
             $tl.expect_time
         "));
 
@@ -262,15 +259,17 @@ class TaskLog extends BaseClass
     /**
      * 设置已执行完毕
      * @param $id
+     * @param $addr
      * @return bool
      */
-    function finish($id,$host_id){
+    function finish($id,$host_id,$addr){
         //获取任务订单
         $task_log = $this->getById($id);
 
         if(is_null($task_log->end_time)){
             $task_log->host_id = $host_id;
             $task_log->end_time = Carbon::now()->toDateTimeString();
+            $task_log->addr = $addr;
             $save_success = $task_log->save();
 
             if($save_success){

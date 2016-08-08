@@ -31,7 +31,7 @@ class ApiController extends Controller
     }
 
     /**
-     * 领任务订单
+     * 领记录
      *
      * @return \Illuminate\Http\Response
      */
@@ -41,7 +41,7 @@ class ApiController extends Controller
     }
 
     /**
-     * 保存任务订单已完成
+     * 保存记录已完成
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -79,23 +79,23 @@ class ApiController extends Controller
         $action = strtolower($input['action']);
 
         switch($action){
-            case 'hours_order':
-                //获取订单
+            case 'hour_records':
+                //获取记录
                 $task_logs = $this->clsApi->getHoursTaskLog();
 
                 if($task_logs){
-                    $resp = $this->json_success('任务订单获取成功',$task_logs->toArray());
+                    $resp = $this->json_success('记录获取成功',$task_logs->toArray());
                 }else{
-                    $resp = $this->json_error('任务订单获取失败');
+                    $resp = $this->json_error('记录获取失败');
                 }
 
                 return $resp;
                 break;
 
-            case 'order':
-                //获取订单
-                return $this->getOrder($input['code']);
-                break;
+//            case 'order':
+//                //获取记录
+//                return $this->getOrder($input['code']);
+//                break;
 
             case 'host':
                 //获取所有主机
@@ -113,12 +113,13 @@ class ApiController extends Controller
                 break;
 
             case 'finish':
-                //订单设置已完成
-                $is_success = $this->clsApi->taskLogFinish($input['id'],$input['code']);
+                //记录设置已完成
+                $is_success = $this->clsApi->taskLogFinish($input['id'],$input['code'],$input['addr']);
+
                 if($is_success){
-                    $resp = $this->json_success('任务订单更新成功');
+                    $resp = $this->json_success('记录更新成功');
                 }else{
-                    $resp = $this->json_error('任务订单更新失败');
+                    $resp = $this->json_error('记录更新失败');
                 }
                 return $resp;
                 break;
@@ -134,6 +135,7 @@ class ApiController extends Controller
 
                 //获取主机的代理ip
                 $host_proxy = $this->clsApi->host_proxy($input['code']);
+
                 if($host_proxy){
                     $resp = $this->json_success('代理IP获取成功',$host_proxy->toArray());
                 }else{
@@ -143,6 +145,12 @@ class ApiController extends Controller
                 break;
 
             case 'host_proxy_update':
+
+                //有参数用参数，没有参数用获取值
+                $clientIp = $request->getClientIp();
+                if(!isset($input['addr']) || empty($input['addr'])){
+                    $input['addr'] = $clientIp;
+                }
 
                 //验证
                 $validator = App\HostProxy::updateValidator($input);
@@ -162,7 +170,7 @@ class ApiController extends Controller
                 return $resp;
                 break;
             case 'reset_ip':
-                //获取订单
+                //获取记录
                 $reset_success = $this->clsApi->host_reset_ip($input['code']);
 
                 if($reset_success){
@@ -175,11 +183,16 @@ class ApiController extends Controller
                 break;
 
             case 'software':
-                //获取订单
+                //获取记录
                 $software = $this->clsApi->software($input['code']);
 
                 if($software){
-                    $resp = $this->json_success('软件信息获取成功',$software->toArray());
+                    $software_array = $software->toArray();
+
+                    unset($software_array['created_at']);
+                    unset($software_array['updated_at']);
+
+                    $resp = $this->json_success('软件信息获取成功',$software_array);
                 }else{
                     $resp = $this->json_error('软件信息获取成功失败:'.$this->clsApi->getErrorMsg());
                 }
@@ -212,19 +225,19 @@ class ApiController extends Controller
     }
 
     /**
-     * 获取订单
+     * 获取记录
      * @param $code
      * @return \Illuminate\Http\JsonResponse
      */
     private function getOrder($code){
 
-        //领任务
+        //领记录
         $task_log = $this->clsApi->getTaskLog($code);
 
         if(is_null($task_log)){
-            $rsp = $this->json_error('暂无任务订单');
+            $rsp = $this->json_error('暂无记录');
         }else if($task_log){
-            $rsp = $this->json_success('任务订单获取成功',$task_log->toArray());
+            $rsp = $this->json_success('记录获取成功',$task_log->toArray());
         }else{
             $rsp = $this->json_error($this->clsApi->getErrorMsg());
         }
